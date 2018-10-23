@@ -121,7 +121,8 @@
             }
         },
         created() {
-            this.fetchKitties()
+            this.fetchKitties();
+            this.fetchKittyById('1');
         },
 
         computed: {
@@ -130,7 +131,7 @@
 
         },
         methods: {
-            ...mapActions('kitties', ['fetchKitties']),
+            ...mapActions('kitties', ['fetchKitties', 'fetchKittyById']),
             createPost() {
                 fb.postsCollection.add({
                     createdOn: new Date(),

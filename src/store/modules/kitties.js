@@ -1,4 +1,5 @@
-const fb = require('../../firebaseConfig.js')
+const fb = require('../../firebaseConfig.js');
+const contracts = require('./contracts.js');
 
 export default {
     namespaced: true,
@@ -17,6 +18,14 @@ export default {
         },
         fetchKitties({ commit, state }) {
             fb.kittiesCollection.get().then(res => {
+                commit('setKitties', res.docs)
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+        fetchKittyById({ commit, state }) {
+            contracts.getKittiesById('1').then(res => {
+                debugger;
                 commit('setKitties', res.docs)
             }).catch(err => {
                 console.log(err)
