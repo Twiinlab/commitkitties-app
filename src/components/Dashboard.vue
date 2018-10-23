@@ -38,6 +38,21 @@
                 <div v-else>
                     <p class="no-results">There are currently no posts</p>
                 </div>
+                 <p>kitties</p>
+                <div v-if="kitties.length">
+                    <div v-for="kitty in kitties" class="post">
+                        <!-- <h5>{{ kitty.id }}</h5> -->
+                        <p>{{ kitty.name }}</p>
+                        <img class="kitty-img" v-if="kitty.image_url" v-bind:src="kitty.image_url" alt="">
+                        <!-- <span>{{ post.createdOn | formatDate }}</span>
+                        <p>{{ post.content | trimLength }}</p>
+                        <ul>
+                            <li><a @click="openCommentModal(post)">comments {{ post.comments }}</a></li>
+                            <li><a @click="likePost(post.id, post.likes)">likes {{ post.likes }}</a></li>
+                            <li><a @click="viewPost(post)">view full post</a></li>
+                        </ul> -->
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -83,7 +98,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import { mapState, mapGetters, mapActions } from 'vuex'
     import moment from 'moment'
     const fb = require('../firebaseConfig.js')
 
@@ -105,10 +120,17 @@
                 postComments: []
             }
         },
+        created() {
+            this.fetchKitties()
+        },
+
         computed: {
-            ...mapState(['userProfile', 'currentUser', 'posts', 'hiddenPosts'])
+            ...mapGetters('users', ['userProfile', 'currentUser', 'posts', 'hiddenPosts']),
+            ...mapGetters('kitties', ['kitties'])
+
         },
         methods: {
+            ...mapActions('kitties', ['fetchKitties']),
             createPost() {
                 fb.postsCollection.add({
                     createdOn: new Date(),
@@ -215,3 +237,12 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    .kitty-img {
+    width: 100%;
+    }
+</style>
+
+
+

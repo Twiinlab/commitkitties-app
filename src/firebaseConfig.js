@@ -28,6 +28,8 @@ const usersCollection = db.collection('users')
 const postsCollection = db.collection('posts')
 const commentsCollection = db.collection('comments')
 const likesCollection = db.collection('likes')
+const kittiesCollection = db.collection('kitties')
+
 
 export {
     db,
@@ -36,5 +38,6 @@ export {
     usersCollection,
     postsCollection,
     commentsCollection,
-    likesCollection
+    likesCollection,
+    kittiesCollection
 }

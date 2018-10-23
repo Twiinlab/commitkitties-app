@@ -12,7 +12,7 @@
     export default {
         components: { Navigation },
         computed: {
-            ...mapState(['currentUser'])
+            ...mapState('users', ['currentUser'])
         }
     }
 </script>

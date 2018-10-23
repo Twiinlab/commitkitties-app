@@ -20,7 +20,7 @@
         methods: {
             logout() {
                 fb.auth.signOut().then(() => {
-                    this.$store.dispatch('clearData')
+                    this.$store.dispatch('users/clearData')
                     this.$router.push('/login')
                 }).catch(err => {
                     console.log(err)

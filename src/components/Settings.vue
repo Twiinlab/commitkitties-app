@@ -22,7 +22,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import { mapGetters } from 'vuex'
 
     export default {
         data() {
@@ -33,11 +33,11 @@
             }
         },
         computed: {
-            ...mapState(['userProfile'])
+            ...mapGetters('users', ['userProfile'])
         },
         methods: {
             updateProfile() {
-                this.$store.dispatch('updateProfile', {
+                this.$store.dispatch('users/updateProfile', {
                     name: this.name !== '' ? this.name : this.userProfile.name,
                     title: this.title !== '' ? this.title : this.userProfile.title
                 })
