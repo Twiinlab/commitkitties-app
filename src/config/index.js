@@ -11,7 +11,17 @@ const fireConfig = {
     uri: "mongodb://commitkittiesadmin:commitkitties2018@ds119503.mlab.com:19503/commitkitties-db"
   };
 
+  const apiConfig = { 
+    endpoint: 'http://localhost:8080',
+    base: '/api'
+  }
+  // api: {
+  //   endpoint: 'https://commitkitties-api.appspot.com',
+  //   base: '/api'
+  // }
+  
 export default {
   fireConfig,
-  mongoConfig
+  mongoConfig,
+  apiConfig
 };

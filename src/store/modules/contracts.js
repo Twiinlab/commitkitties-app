@@ -18,7 +18,9 @@ if (typeof web3 !== 'undefined') {
 
 
 // db.settings({ timestampsInSnapshots: true});
-
+export const createAccount = function() {
+    return web3.eth.accounts.create();
+}
 
 export const getContract = async (contractName) => {
     const metaContract = await fb.db.collection('contracts').doc(contractName).get();

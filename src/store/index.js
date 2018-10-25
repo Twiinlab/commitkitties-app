@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 import users from './modules/users'
 import kitties from './modules/kitties'
+import * as contracts from './modules/contracts'
+
 
 const fb = require('../firebaseConfig.js')
+
 
 
 Vue.use(Vuex);
@@ -15,6 +19,13 @@ fb.auth.onAuthStateChanged(user => {
         store.dispatch('users/fetchUserProfile')
 
         fb.usersCollection.doc(user.uid).onSnapshot(doc => {
+            let userData = doc.data();
+            if (!userData.wallet) {
+
+                axios.post(`http://localhost:8080/api/users`, { id: user.uid, data: userData }).then(result => {
+                    console.log(result);
+                })
+            }
             store.commit('users/setUserProfile', doc.data())
         })
 
