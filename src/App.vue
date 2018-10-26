@@ -1,6 +1,7 @@
 <template>
     <div id="app">
-        <Navigation v-if="currentUser"></Navigation>
+        <!--<Navigation v-if="currentUser"></Navigation>-->
+        <Navigation></Navigation>
     	<router-view/>
     </div>
 </template>
