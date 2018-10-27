@@ -32,6 +32,7 @@ const kittiesCollection = db.collection('kitties')
 
 
 export {
+    firebase,
     db,
     auth,
     currentUser,

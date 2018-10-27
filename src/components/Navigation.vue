@@ -3,7 +3,7 @@
         <section>
             <div class="col1">
                 <router-link to="dashboard"><h3>Vuegram</h3></router-link>
-                <ul v-if="userIsAuthenticated" class="inline">
+                <ul v-if="currentUser" class="inline">
                     <li><router-link to="dashboard">Dashboard</router-link></li>
                     <li><router-link to="settings">Settings</router-link></li>
                     <li><a @click="logout">logout</a></li>
@@ -18,14 +18,12 @@
 </template>
 
 <script>
-    import firebase from 'firebase'
+    import { mapState } from 'vuex'
     const fb = require('../firebaseConfig.js')
 
     export default {
         computed: {
-            userIsAuthenticated () {
-                return this.$store.getters.user !== null && this.$store.getters.user !== undefined
-            }
+            ...mapState('users', ['currentUser'])
         },
         methods: {
             logout() {
@@ -37,11 +35,15 @@
                 })
             },
             login() {
-                fb.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(user => {
+                fb.auth.signInWithPopup(new fb.firebase.auth.GoogleAuthProvider())
+                .then(user => { 
                     this.$store.commit('users/setCurrentUser', user)
                     this.$store.dispatch('users/fetchUserProfile')
-                    //this.$router.push('/login')
-                }).catch(err => {
+                    this.performingRequest = false
+                    this.$router.push('/dashboard')
+                    console.log('UserLogin:' + user)
+                })
+                .catch(err => {
                     console.log(err)
                 })
             }
