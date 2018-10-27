@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import firebase from 'firebase'
 
-import Login from '@/components/Login'
+import Home from '@/components/Home'
 import Dashboard from '@/components/Dashboard'
 import Settings from '@/components/Settings'
 
@@ -13,12 +13,12 @@ const router = new Router({
 	routes: [
 		{
 			path: '*',
-			redirect: '/dashboard'
+			redirect: '/home'
 		},
 		{
-			path: '/login',
-			name: 'Login',
-			component: Login
+			path: '/home',
+			name: 'home',
+			component: Home
 		},
         {
 			path: '/dashboard',

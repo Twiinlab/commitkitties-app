@@ -29,7 +29,7 @@
             logout() {
                 fb.auth.signOut().then(() => {
                     this.$store.dispatch('users/clearData')
-                    //this.$router.push('/login')
+                    this.$router.push('/home')
                 }).catch(err => {
                     console.log(err)
                 })
@@ -42,7 +42,7 @@
                     this.$store.commit('users/setCurrentUser', user)
                     this.$store.dispatch('users/fetchUserProfile')
                     this.performingRequest = false
-                    //this.$router.push('/dashboard')
+                    this.$router.push('/dashboard')
                     console.log('UserLogin:' + user.uid + " " + user.displayName)
                 })
                 .catch(err => {
