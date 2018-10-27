@@ -32,15 +32,15 @@ export default {
             })
         },
         updateProfile({ commit, state }, data) {
-            let name = data.name
-            let title = data.title
+            let displayName = data.displayName
+            let email = data.email
 
-            fb.usersCollection.doc(state.currentUser.uid).update({ name, title }).then(user => {
+            fb.usersCollection.doc(state.currentUser.uid).update({ displayName, email }).then(user => {
                 // update all posts by user to reflect new name
                 fb.postsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
                     docs.forEach(doc => {
                         fb.postsCollection.doc(doc.id).update({
-                            userName: name
+                            userName: displayName
                         })
                     })
                 })
@@ -48,7 +48,7 @@ export default {
                 fb.commentsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
                     docs.forEach(doc => {
                         fb.commentsCollection.doc(doc.id).update({
-                            userName: name
+                            userName: displayName
                         })
                     })
                 })

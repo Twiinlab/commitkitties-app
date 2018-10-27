@@ -19,11 +19,25 @@ fb.auth.onAuthStateChanged(user => {
         store.dispatch('users/fetchUserProfile')
 
         fb.usersCollection.doc(user.uid).onSnapshot(doc => {
-            let userData = doc.data();
-            if (!userData.wallet) {
-
-                axios.post(`http://localhost:8080/api/users`, { id: user.uid, data: userData }).then(result => {
-                    console.log(result);
+            if(doc.exists){
+                let userData = doc.data();
+                if (!userData.wallet) {
+                        // create user wallet
+                        axios.post(`http://localhost:8080/api/users`, { id: user.uid, data: userData }).then(result => {
+                            console.log(result);
+                        })
+                    }
+            }
+            else{
+                // create user obj
+                fb.usersCollection.doc(user.uid).set({
+                    displayName: user.displayName,
+                    email: user.email
+                }).then(() => {
+                    this.$store.dispatch('users/fetchUserProfile')
+                }).catch(err => {
+                    console.log(err)
+                    this.errorMsg = err.message
                 })
             }
             store.commit('users/setUserProfile', doc.data())

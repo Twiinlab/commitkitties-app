@@ -25,7 +25,7 @@ export default {
         },
         fetchKittyById({ commit, state }) {
             contracts.getKittiesById('1').then(res => {
-                debugger;
+                //debugger;
                 commit('setKitties', res.docs)
             }).catch(err => {
                 console.log(err)

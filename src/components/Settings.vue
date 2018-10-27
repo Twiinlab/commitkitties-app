@@ -9,11 +9,11 @@
             </transition>
 
             <form @submit.prevent>
-                <label for="name">Name</label>
-                <input v-model.trim="name" type="text" :placeholder="userProfile.name" id="name" />
+                <label for="name">Display Name</label>
+                <input v-model.trim="displayName" type="text" :placeholder="userProfile.displayName" id="displayName" />
 
-                <label for="title">Job Title</label>
-                <input v-model.trim="title" type="text" :placeholder="userProfile.title" id="title" />
+                <label for="title">Email</label>
+                <input v-model.trim="email" type="text" :placeholder="userProfile.email" id="email" />
 
                 <button @click="updateProfile" class="button">Update Profile</button>
             </form>
@@ -27,8 +27,8 @@
     export default {
         data() {
             return {
-                name: '',
-                title: '',
+                displayName: '',
+                email: '',
                 showSuccess: false
             }
         },
@@ -38,12 +38,12 @@
         methods: {
             updateProfile() {
                 this.$store.dispatch('users/updateProfile', {
-                    name: this.name !== '' ? this.name : this.userProfile.name,
-                    title: this.title !== '' ? this.title : this.userProfile.title
+                    displayName: this.displayName !== '' ? this.displayName : this.userProfile.displayName,
+                    email: this.email !== '' ? this.email : this.userProfile.email
                 })
 
-                this.name = ''
-                this.title = ''
+                this.displayName = ''
+                this.email = ''
 
                 this.showSuccess = true
 
