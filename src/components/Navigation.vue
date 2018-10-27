@@ -36,12 +36,14 @@
             },
             login() {
                 fb.auth.signInWithPopup(new fb.firebase.auth.GoogleAuthProvider())
-                .then(user => { 
+                .then(fbUser => {
+                    const user = fbUser.user
+                    //TODO: following calls don't interact but don't crash neither ;) 
                     this.$store.commit('users/setCurrentUser', user)
                     this.$store.dispatch('users/fetchUserProfile')
                     this.performingRequest = false
-                    this.$router.push('/dashboard')
-                    console.log('UserLogin:' + user)
+                    //this.$router.push('/dashboard')
+                    console.log('UserLogin:' + user.uid + " " + user.displayName)
                 })
                 .catch(err => {
                     console.log(err)
