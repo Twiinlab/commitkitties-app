@@ -15,18 +15,19 @@ Vue.use(Vuex);
 // handle page reload
 fb.auth.onAuthStateChanged(user => {
     if (user) {
-        store.commit('users/setCurrentUser', user)
-        store.dispatch('users/fetchUserProfile')
+        // store.commit('users/setCurrentUser', user)
+        // store.dispatch('users/fetchUserProfile')
 
+        
         fb.usersCollection.doc(user.uid).onSnapshot(doc => {
             if(doc.exists){
                 let userData = doc.data();
                 if (!userData.wallet) {
-                        // create user wallet
-                        axios.post(`http://localhost:8080/api/users`, { id: user.uid, data: userData }).then(result => {
-                            console.log(result);
-                        })
-                    }
+                    // create user wallet
+                    axios.post(`http://localhost:8080/api/users`, { id: user.uid, data: userData }).then(result => {
+                        console.log(result);
+                    })
+                }
             }
             else{
                 // create user obj
