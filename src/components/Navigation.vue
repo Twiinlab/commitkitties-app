@@ -2,16 +2,16 @@
     <header>
         <section>
             <div class="col1">
-                <router-link to="home"><h3>CommitKitties</h3></router-link>
+                <router-link to="/home"><h3>CommitKitties</h3></router-link>
                 <ul v-if="currentUser" class="inline">
-                    <li><router-link to="home">Home</router-link></li>
-                    <li><router-link to="dashboard">Dashboard</router-link></li>
-                    <li><router-link to="settings">Settings</router-link></li>
+                    <li><router-link to="/home">Home</router-link></li>
+                    <li><router-link to="/dashboard">Dashboard</router-link></li>
+                    <li><router-link to="/settings">Settings</router-link></li>
                     <li><a @click="logout">logout</a></li>
                 </ul>
                 <ul v-else class="inline">
-                    <li><router-link to="home">Home</router-link></li>
-                    <li><router-link to="dashboard">Dashboard</router-link></li>
+                    <li><router-link to="/home">Home</router-link></li>
+                    <li><router-link to="/dashboard">Dashboard</router-link></li>
                     <li><a @click="login">login</a></li>
                 </ul>
             </div>

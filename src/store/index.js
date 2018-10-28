@@ -48,7 +48,7 @@ fb.auth.onAuthStateChanged(user => {
         fb.postsCollection.orderBy('createdOn', 'desc').onSnapshot(querySnapshot => {
             // check if created by currentUser
             let createdByCurrentUser
-            if (querySnapshot.docs.length) {
+            if (querySnapshot.docs.length && store.getters['users/currentUser']) {
                 createdByCurrentUser = store.getters['users/currentUser'].uid == querySnapshot.docChanges[0].doc.data().userId ? true : false
             }
 

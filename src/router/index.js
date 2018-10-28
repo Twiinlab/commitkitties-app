@@ -4,6 +4,7 @@ import firebase from 'firebase'
 
 import Home from '@/components/Home'
 import Dashboard from '@/components/Dashboard'
+import Kitty from '@/components/Kitty'
 import Settings from '@/components/Settings'
 
 Vue.use(Router)
@@ -27,6 +28,11 @@ const router = new Router({
             meta: {
                 requiresAuth: true
             }
+		},
+		{
+			path: '/kitty/:id',
+			name: 'Kitty',
+			component: Kitty
 		},
         {
 			path: '/settings',

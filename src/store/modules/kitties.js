@@ -5,11 +5,15 @@ export default {
     namespaced: true,
 
     state: {
-        kitties: []
+        kitties: [],
+        onSaleKitties: [],
+        selectedKitty: {}
     },
 
     getters: {
-        kitties: (state) => state.kitties
+        kitties: (state) => state.kitties,
+        onSaleKitties: (state) => state.onSaleKitties,
+        selectedKitty: (state) => state.selectedKitty
     },
 
     actions: {
@@ -23,10 +27,17 @@ export default {
                 console.log(err)
             })
         },
-        fetchKittyById({ commit, state }) {
-            contracts.getKittiesById('1').then(res => {
-                //debugger;
-                commit('setKitties', res.docs)
+        fetchKittyById({ commit, state }, data) {
+            // contracts.getKittiesById('1').then(res => {
+            fb.kittiesCollection.where("id","==",data).get().then(res => {
+                commit('setSalectedKitty', res.docs[0]);
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+        fetchOnSaleKitties({ commit, state }, data) {
+            fb.kittiesCollection.where("generation","==",data).get().then(res => {
+                commit('setOnSaleKitties', res.docs)
             }).catch(err => {
                 console.log(err)
             })
@@ -63,8 +74,22 @@ export default {
             if (val) {
                 state.kitties = val.map(d => d.data());
             } else {
-                state.posts = []
+                state.kitties = []
             }
-        }
+        },
+        setOnSaleKitties(state, val) {
+            if (val) {
+                state.onSaleKitties = val.map(d => d.data());
+            } else {
+                state.onSaleKitties = []
+            }
+        },
+        setSalectedKitty(state, val) {
+            if (val) {
+                state.selectedKitty = val.data();
+            } else {
+                state.selectedKitty = {}
+            }
+        },
     }
 };

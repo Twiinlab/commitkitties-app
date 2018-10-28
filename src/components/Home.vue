@@ -1,74 +1,38 @@
 <template>
-    <div id="login">
-        <transition name="fade">
-            <div v-if="performingRequest" class="loading">
-                <p>Loading...</p>
-            </div>
-        </transition>
+    <div id="dashboard">
         <section>
-            <div class="col1">
-                <h1>CommitKitties</h1>
-                <p>Welcome to the <a href="https://savvyapps.com/" target="_blank">Savvy Apps</a> sample social media web app powered by Vue.js and Firebase.
-                    Build this project by checking out The Definitive Guide to Getting Started with Vue.js</p>
-            </div>
-            <div class="col2" :class="{ 'signup-form': !showLoginForm && !showForgotPassword }">
-                <form v-if="showLoginForm" @submit.prevent>
-                    <h1>Welcome Back</h1>
-
-                    <label for="email1">Email</label>
-                    <input v-model.trim="loginForm.email" type="text" placeholder="you@email.com" id="email1" />
-
-                    <label for="password1">Password</label>
-                    <input v-model.trim="loginForm.password" type="password" placeholder="******" id="password1" />
-
-                    <button @click="login" class="button">Log In</button>
-
-                    <div class="extras">
-                        <a @click="togglePasswordReset">Forgot Password</a>
-                        <a @click="toggleForm">Create an Account</a>
+            <div>
+                <h1>Market</h1>
+                <div class="profile">
+                    <label>RECENTLY LISTED</label>
+                    <div class="scrolling-wrapper">
+                        <router-link :to="{ name: 'Kitty', params: { id: kitty.id}}" v-if="kitty.image_url" v-for="kitty in kitties" v-bind:key="kitty.id">
+                            <md-card >
+                                <md-card-media>
+                                    <img v-if="kitty.image_url" v-bind:src="kitty.image_url" alt="People">
+                                </md-card-media>
+                                <md-card-header>
+                                    <div class="md-title">Title goes here</div>
+                                    <div class="md-subhead">Subtitle here</div>
+                                </md-card-header>                                
+                            </md-card>
+                        </router-link>
                     </div>
-                </form>
-                <form v-if="!showLoginForm && !showForgotPassword" @submit.prevent>
-                    <h1>Get Started</h1>
-
-                    <label for="name">Name</label>
-                    <input v-model.trim="signupForm.name" type="text" placeholder="Savvy Apps" id="name" />
-
-                    <label for="title">Title</label>
-                    <input v-model.trim="signupForm.title" type="text" placeholder="Company" id="title" />
-
-                    <label for="email2">Email</label>
-                    <input v-model.trim="signupForm.email" type="text" placeholder="you@email.com" id="email2" />
-
-                    <label for="password2">Password</label>
-                    <input v-model.trim="signupForm.password" type="password" placeholder="min 6 characters" id="password2" />
-
-                    <button @click="signup" class="button">Sign Up</button>
-
-                    <div class="extras">
-                        <a @click="toggleForm">Back to Log In</a>
+                    <label>ON SALE</label>
+                    <div class="scrolling-wrapper">
+                        <router-link :to="{ name: 'Kitty', params: { id: kitty.id}}" v-for="kitty in onSaleKitties" v-if="kitty.image_url" v-bind:key="kitty.id">
+                            <md-card >
+                                <md-card-media>
+                                    <img v-if="kitty.image_url" v-bind:src="kitty.image_url" alt="People">
+                                </md-card-media>
+                                <md-card-header>
+                                    <div class="md-title">Title goes here</div>
+                                    <div class="md-subhead">Subtitle here</div>
+                                </md-card-header>                                
+                            </md-card>
+                        </router-link>
                     </div>
-                </form>
-                <form v-if="showForgotPassword" @submit.prevent class="password-reset">
-                    <div v-if="!passwordResetSuccess">
-                        <h1>Reset Password</h1>
-                        <p>We will send you an email to reset your password</p>
-
-                        <label for="email3">Email</label>
-                        <input v-model.trim="passwordForm.email" type="text" placeholder="you@email.com" id="email3" />
-
-                        <button @click="resetPassword" class="button">Submit</button>
-
-                        <div class="extras">
-                            <a @click="togglePasswordReset">Back to Log In</a>
-                        </div>
-                    </div>
-                    <div v-else>
-                        <h1>Email Sent</h1>
-                        <p>check your email for a link to reset your password</p>
-                        <button @click="togglePasswordReset" class="button">Back to login</button>
-                    </div>
-                </form>
+                </div>
                 <transition name="fade">
                     <div v-if="errorMsg !== ''" class="error-msg">
                         <p>{{ errorMsg }}</p>
@@ -79,98 +43,47 @@
     </div>
 </template>
 
+<style lang="scss" scoped>
+  .profile{
+      display: grid;
+  }
+
+  .scrolling-wrapper{
+    //overflow-x: scroll;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
+  .md-card {
+    width: 240px;
+    margin: 4px;
+    display: inline-block;
+    vertical-align: top;
+  }
+</style>
+
 <script>
     const fb = require('../firebaseConfig.js')
+    import { mapState, mapGetters, mapActions } from 'vuex'
 
     export default {
         data() {
             return {
-                loginForm: {
-                    email: '',
-                    password: ''
-                },
-                signupForm: {
-                    name: '',
-                    title: '',
-                    email: '',
-                    password: ''
-                },
-                passwordForm: {
-                    email: ''
-                },
-                showLoginForm: true,
-                showForgotPassword: false,
-                passwordResetSuccess: false,
-                performingRequest: false,
                 errorMsg: ''
             }
         },
+        created() {
+            this.fetchKitties();
+            this.fetchOnSaleKitties(5);
+        },
+        computed: {
+            ...mapGetters('kitties', ['kitties','onSaleKitties'])
+        },
         methods: {
+            ...mapActions('kitties', ['fetchKitties','fetchOnSaleKitties']),
             toggleForm() {
                 this.errorMsg = ''
                 this.showLoginForm = !this.showLoginForm
-            },
-            togglePasswordReset() {
-                if (this.showForgotPassword) {
-                    this.showLoginForm = true
-                    this.showForgotPassword = false
-                    this.passwordResetSuccess = false
-                } else {
-                    this.showLoginForm = false
-                    this.showForgotPassword = true
-                }
-            },
-            login() {
-                this.performingRequest = true
-
-                fb.auth.signInWithEmailAndPassword(this.loginForm.email, this.loginForm.password).then(user => {
-                    this.$store.commit('users/setCurrentUser', user)
-                    this.$store.dispatch('users/fetchUserProfile')
-                    this.performingRequest = false
-                    this.$router.push('/dashboard')
-                }).catch(err => {
-                    console.log(err)
-                    this.performingRequest = false
-                    this.errorMsg = err.message
-                })
-            },
-            signup() {
-                this.performingRequest = true
-
-                fb.auth.createUserWithEmailAndPassword(this.signupForm.email, this.signupForm.password).then(user => {
-                    this.$store.commit('users/setCurrentUser', user)
-
-                    // create user obj
-                    fb.usersCollection.doc(user.uid).set({
-                        name: this.signupForm.name,
-                        title: this.signupForm.title
-                    }).then(() => {
-                        this.$store.dispatch('users/fetchUserProfile')
-                        this.performingRequest = false
-                        this.$router.push('/dashboard')
-                    }).catch(err => {
-                        console.log(err)
-                        this.performingRequest = false
-                        this.errorMsg = err.message
-                    })
-                }).catch(err => {
-                    console.log(err)
-                    this.performingRequest = false
-                    this.errorMsg = err.message
-                })
-            },
-            resetPassword() {
-                this.performingRequest = true
-
-                fb.auth.sendPasswordResetEmail(this.passwordForm.email).then(() => {
-                    this.performingRequest = false
-                    this.passwordResetSuccess = true
-                    this.passwordForm.email = ''
-                }).catch(err => {
-                    console.log(err)
-                    this.performingRequest = false
-                    this.errorMsg = err.message
-                })
             }
         }
     }

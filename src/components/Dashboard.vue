@@ -24,7 +24,7 @@
                     </div>
                 </transition>
                 <div v-if="posts.length">
-                    <div v-for="post in posts" class="post">
+                    <div v-for="post in posts" class="post" v-bind:key="post.id">
                         <h5>{{ post.userName }}</h5>
                         <span>{{ post.createdOn | formatDate }}</span>
                         <p>{{ post.content | trimLength }}</p>
@@ -40,7 +40,7 @@
                 </div>
                  <p>kitties</p>
                 <div v-if="kitties.length">
-                    <div v-for="kitty in kitties" class="post">
+                    <div v-for="kitty in kitties" class="post" v-bind:key="kitty.id">
                         <!-- <h5>{{ kitty.id }}</h5> -->
                         <p>{{ kitty.name }}</p>
                         <img class="kitty-img" v-if="kitty.image_url" v-bind:src="kitty.image_url" alt="">
@@ -85,7 +85,7 @@
                         </ul>
                     </div>
                     <div v-show="postComments.length" class="comments">
-                        <div v-for="comment in postComments" class="comment">
+                        <div v-for="comment in postComments" class="comment" v-bind:key="comment.id">
                             <p>{{ comment.userName }}</p>
                             <span>{{ comment.createdOn | formatDate }}</span>
                             <p>{{ comment.content }}</p>
