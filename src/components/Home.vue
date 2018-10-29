@@ -4,6 +4,20 @@
             <div>
                 <h1>Market</h1>
                 <div class="profile">
+                    <label>MY KITTIES</label>
+                    <div class="scrolling-wrapper">
+                        <router-link :to="{ name: 'Kitty', params: { id: kitty.id}}" v-if="kitty.image_url" v-for="kitty in myKitties" v-bind:key="kitty.id">
+                            <md-card >
+                                <md-card-media>
+                                    <img v-if="kitty.image_url" v-bind:src="kitty.image_url" alt="People">
+                                </md-card-media>
+                                <md-card-header>
+                                    <div class="md-title">Title goes here</div>
+                                    <div class="md-subhead">Subtitle here</div>
+                                </md-card-header>                                
+                            </md-card>
+                        </router-link>
+                    </div>
                     <label>RECENTLY LISTED</label>
                     <div class="scrolling-wrapper">
                         <router-link :to="{ name: 'Kitty', params: { id: kitty.id}}" v-if="kitty.image_url" v-for="kitty in kitties" v-bind:key="kitty.id">
@@ -75,12 +89,13 @@
         created() {
             this.fetchKitties();
             this.fetchOnSaleKitties(5);
+            this.fetchMyKitties('Ix0Mo3CbhbegnTft36X0yCUWnhJ3');
         },
         computed: {
-            ...mapGetters('kitties', ['kitties','onSaleKitties'])
+            ...mapGetters('kitties', ['kitties','onSaleKitties','myKitties'])
         },
         methods: {
-            ...mapActions('kitties', ['fetchKitties','fetchOnSaleKitties']),
+            ...mapActions('kitties', ['fetchKitties','fetchOnSaleKitties','fetchMyKitties']),
             toggleForm() {
                 this.errorMsg = ''
                 this.showLoginForm = !this.showLoginForm

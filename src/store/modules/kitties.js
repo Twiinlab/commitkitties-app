@@ -7,12 +7,14 @@ export default {
     state: {
         kitties: [],
         onSaleKitties: [],
+        myKitties: [],
         selectedKitty: {}
     },
 
     getters: {
         kitties: (state) => state.kitties,
         onSaleKitties: (state) => state.onSaleKitties,
+        myKitties: (state) => state.myKitties,
         selectedKitty: (state) => state.selectedKitty
     },
 
@@ -38,6 +40,13 @@ export default {
         fetchOnSaleKitties({ commit, state }, data) {
             fb.kittiesCollection.where("generation","==",data).get().then(res => {
                 commit('setOnSaleKitties', res.docs)
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+        fetchMyKitties({ commit, state }, data) {
+            fb.kittiesCollection.where("owner.userId","==",data).get().then(res => {
+                commit('setMyKitties', res.docs)
             }).catch(err => {
                 console.log(err)
             })
@@ -91,5 +100,12 @@ export default {
                 state.selectedKitty = {}
             }
         },
+        setMyKitties(state, val) {
+            if (val) {
+                state.myKitties = val.map(d => d.data());
+            } else {
+                state.myKitties = {}
+            }
+        }
     }
 };
