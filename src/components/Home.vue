@@ -12,9 +12,9 @@
                                     <img v-if="kitty.image_url" v-bind:src="kitty.image_url" alt="People">
                                 </md-card-media>
                                 <md-card-header>
-                                    <div class="md-title">Title goes here</div>
-                                    <div class="md-subhead">Subtitle here</div>
-                                </md-card-header>                                
+                                    <div class="md-subhead">{{kitty.name|truncate(30)}}</div>
+                                    <div class="md-subhead">Ξ  0.020</div>
+                                </md-card-header>                           
                             </md-card>
                         </router-link>
                     </div>
@@ -26,8 +26,8 @@
                                     <img v-if="kitty.image_url" v-bind:src="kitty.image_url" alt="People">
                                 </md-card-media>
                                 <md-card-header>
-                                    <div class="md-title">Title goes here</div>
-                                    <div class="md-subhead">Subtitle here</div>
+                                    <div class="md-subhead">{{kitty.name|truncate(30)}}</div>
+                                    <div class="md-subhead">Ξ  0.020</div>
                                 </md-card-header>                                
                             </md-card>
                         </router-link>
@@ -40,8 +40,8 @@
                                     <img v-if="kitty.image_url" v-bind:src="kitty.image_url" alt="People">
                                 </md-card-media>
                                 <md-card-header>
-                                    <div class="md-title">Title goes here</div>
-                                    <div class="md-subhead">Subtitle here</div>
+                                    <div class="md-subhead">{{kitty.name|truncate(30)}}</div>
+                                    <div class="md-subhead">Ξ  0.020</div>
                                 </md-card-header>                                
                             </md-card>
                         </router-link>
@@ -99,6 +99,14 @@
             toggleForm() {
                 this.errorMsg = ''
                 this.showLoginForm = !this.showLoginForm
+            }
+        },
+        filters: {
+            truncate: function(value, limit) {
+                if (value.length > limit) {
+                    value = value.substring(0, (limit - 3)) + '...';
+                }
+                return value
             }
         }
     }

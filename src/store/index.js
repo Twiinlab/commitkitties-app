@@ -32,6 +32,7 @@ fb.auth.onAuthStateChanged(user => {
             else{
                 // create user obj
                 fb.usersCollection.doc(user.uid).set({
+                    userId: user.uid,
                     displayName: user.displayName,
                     email: user.email
                 }).then(() => {
