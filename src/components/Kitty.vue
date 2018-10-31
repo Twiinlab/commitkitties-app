@@ -9,9 +9,27 @@
                             <img v-if="selectedKitty.image_url" v-bind:src="selectedKitty.image_url" alt="People">
                         </md-card-media>
                         <md-card-header>
-                            <div class="md-title">Title goes here</div>
-                            <div class="md-subhead">Subtitle here</div>
+                            <div class="md-subhead">{{selectedKitty.name|truncate(30)}}</div>
+                            <div class="md-subhead">Ξ  0.020</div>
                         </md-card-header>
+                        <md-card-expand>
+                            <md-card-actions md-alignment="space-between">
+                                <div>
+                                    <md-button v-if="currentUser.userId==selectedKitty.owner.userId" >Buy</md-button>
+                                    <md-button v-else>Sell</md-button>
+                                </div>
+                                <md-card-expand-trigger>
+                                    <md-button class="md-icon-button">
+                                    <md-icon>keyboard_arrow_down</md-icon>
+                                    </md-button>
+                                </md-card-expand-trigger>
+                            </md-card-actions>
+                            <md-card-expand-content>
+                                <md-card-content>
+                                    {{selectedKitty.bio}}
+                                </md-card-content>
+                            </md-card-expand-content>
+                        </md-card-expand>
                     </md-card>
                 </div>
             </div>
@@ -46,10 +64,19 @@
             console.log("selectedKitty:"+this.selectedKitty);
         },
         computed: {
-            ...mapGetters('kitties', ['selectedKitty'])
+            ...mapGetters('kitties', ['selectedKitty']),
+            ...mapState('users', ['currentUser'])
         },
         methods: {
             ...mapActions('kitties', ['fetchKittyById'])
+        },
+        filters: {
+            truncate: function(value, limit) {
+                if (value.length > limit) {
+                    value = value.substring(0, (limit - 3)) + '...';
+                }
+                return value
+            }
         }
     }
 </script>
