@@ -1,7 +1,11 @@
 import Web3 from 'web3';
+import Tx from 'ethereumjs-tx';
+
 
 // import config  from '@/config';
 const fb = require('../../firebaseConfig.js')
+const store = require('../index.js')
+
 
 let web3 = undefined;
 
@@ -27,11 +31,15 @@ export const getContract = async (contractName) => {
     if (!metaContract.exists) {
         throw new Error(`${contractName} does not exists`);
     }
-    return new web3.eth.Contract(metaContract.data().abi, metaContract.data().address);
+    return {
+        contract: new web3.eth.Contract(metaContract.data().abi, metaContract.data().address),
+        abi: metaContract.data().abi,
+        address: metaContract.data().address
+    }
 }
 
 export const getKittiesById = async (id) => {
-  const contract = await getContract('KittyCore');
+  const { contract } = await getContract('KittyCore');
   try {
       return contract.methods.getKitty(id).call();
   } catch (error) {
@@ -39,3 +47,76 @@ export const getKittiesById = async (id) => {
       console.log(error);
   }
 }
+
+export const callMethod = async (methodName, argumens, options = null) => {
+    const { contract } = await getContract('KittyCore');
+    return contract.methods[methodName](...argumens).call(options)
+}
+
+export const invokeMethod = async (methodName, argumens, wallet) => {
+
+    const { contract, address } = await getContract('KittyCore');
+    var gasPrice = await web3.eth.getGasPrice(); //1; //2;//or get with web3.eth.gasPrice
+    var gasLimit = 3000000;
+
+    const functionAbi = contract.methods[methodName](...argumens).encodeABI()
+
+    // let estimatedGas
+    // contract.methods.myFunctionNAme(myArgument).estimateGas({
+    // from: account,
+    // }).then((gasAmount) => {
+    // estimatedGas = gasAmount.toString(16)
+    // })
+
+    var nonce = await web3.eth.getTransactionCount(wallet.address); //211;
+
+    var rawTransaction = {
+        "from": wallet.address,
+        "nonce": web3.utils.toHex(nonce),
+        "gasPrice": web3.utils.toHex(gasPrice), // '0x' + estimatedGas,
+        "gasLimit": web3.utils.toHex(gasLimit),
+        // "value": 0,
+        "to": address,
+        "data": functionAbi,
+        // "chainId": 4 //rinkeby //remember to change this
+      };
+
+    var tx = new Tx(rawTransaction);
+    tx.sign(new Buffer(wallet.privateKey.substring(2), 'hex'));
+    var serializedTx = tx.serialize();
+
+    return await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'));
+
+}
+
+// SaleClockAuction.at("0x62f29d2be20c5b179a82b7977f7160c8b0b56e3a").then(function(instance){ return instance.bid("1",{from: "0x6999e1d9ec10d0b0d06c657e289f55a2e17dea64", value:"100"});}).then(function(result){console.log(result);})
+
+export const bidAuction = async (tokenId, price, wallet) => {
+
+  const { contract, address } = await getContract('SaleClockAuction');
+  var gasPrice = await web3.eth.getGasPrice(); //1; //2;//or get with web3.eth.gasPrice
+  var gasLimit = 3000000;
+
+  const functionAbi = contract.methods.bid(tokenId).encodeABI()
+
+  var nonce = await web3.eth.getTransactionCount(wallet.address); //211;
+
+  var rawTransaction = {
+      "from": wallet.address,
+      "nonce": web3.utils.toHex(nonce),
+      "gasPrice": web3.utils.toHex(gasPrice), // '0x' + estimatedGas,
+      "gasLimit": web3.utils.toHex(gasLimit),
+      "value": price,
+      "to": address,
+      "data": functionAbi,
+      // "chainId": 4 //rinkeby //remember to change this
+    };
+
+  var tx = new Tx(rawTransaction);
+  tx.sign(new Buffer(wallet.privateKey.substring(2), 'hex'));
+  var serializedTx = tx.serialize();
+
+  return await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'));
+
+}
+

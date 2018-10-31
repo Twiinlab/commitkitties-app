@@ -27,6 +27,14 @@ fb.auth.onAuthStateChanged(user => {
                     axios.post(`http://localhost:8080/api/users`, { id: user.uid, data: userData }).then(result => {
                         console.log(result);
                     })
+                } else {
+                    try {
+                        // contracts.invokeMethod('createSale', ['0x6999e1d9ec10d0b0d06c657e289f55a2e17dea64', '1'], userData.wallet)
+                        // contracts.invokeMethod('createSaleAuction', ['11', 100, 100, 100], userData.wallet)
+                        // contracts.bidAuction('11', 1000, userData.wallet)
+                    } catch (error) {
+                        console.log(error)
+                    }
                 }
             }
             else{
@@ -42,6 +50,8 @@ fb.auth.onAuthStateChanged(user => {
                 })
             }
             store.commit('users/setUserProfile', doc.data())
+
+            
         })
 
         // realtime updates from our posts collection
