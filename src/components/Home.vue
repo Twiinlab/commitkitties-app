@@ -5,8 +5,16 @@
                 <h1>Market</h1>
                 <div class="profile">
                     <label>MY KITTIES</label>
+                    <md-card v-if="(getMyKitties()).length == 0">
+                        <md-card-media>
+                            <img src="@/assets/images/noKitty.png" alt="logo">
+                        </md-card-media>
+                        <md-card-header>
+                            <div class="md-subhead">You don´t own kitties yet</div>
+                        </md-card-header>                        
+                    </md-card>
                     <div class="scrolling-wrapper">
-                        <router-link :to="{ name: 'Kitty', params: { id: kitty.id}}" v-if="kitty.image_url" v-for="kitty in myKitties" v-bind:key="kitty.id">
+                        <router-link :to="{ name: 'Kitty', params: { id: kitty.id}}" v-if="kitty.image_url" v-for="kitty in getMyKitties()" v-bind:key="kitty.id">
                             <md-card >
                                 <md-card-media>
                                     <img v-if="kitty.image_url" v-bind:src="kitty.image_url" alt="People">
@@ -34,7 +42,7 @@
                     </div>
                     <label>ON SALE</label>
                     <div class="scrolling-wrapper">
-                        <router-link :to="{ name: 'Kitty', params: { id: kitty.id}}" v-for="kitty in onSaleKitties" v-if="kitty.image_url" v-bind:key="kitty.id">
+                        <router-link :to="{ name: 'Kitty', params: { id: kitty.id}}" v-if="kitty.image_url" v-for="kitty in getOnSaleKitties()"  v-bind:key="kitty.id">
                             <md-card >
                                 <md-card-media>
                                     <img v-if="kitty.image_url" v-bind:src="kitty.image_url" alt="People">
@@ -92,6 +100,7 @@
             this.fetchMyKitties('Ix0Mo3CbhbegnTft36X0yCUWnhJ3');
         },
         computed: {
+            ...mapState('users', ['userProfile']),
             ...mapGetters('kitties', ['kitties','onSaleKitties','myKitties'])
         },
         methods: {
@@ -99,11 +108,19 @@
             toggleForm() {
                 this.errorMsg = ''
                 this.showLoginForm = !this.showLoginForm
+            },
+            getMyKitties(){
+                if (!this.userProfile || !this.kitties) return [];
+                return this.kitties.filter(kitty => kitty.owner.address == this.userProfile.wallet.address );
+            },
+            getOnSaleKitties(){
+                if (!this.kitties) return [];
+                return this.kitties.filter(kitty => kitty.auction.price );
             }
         },
         filters: {
             truncate: function(value, limit) {
-                if (value.length > limit) {
+                if (value && value.length > limit) {
                     value = value.substring(0, (limit - 3)) + '...';
                 }
                 return value
