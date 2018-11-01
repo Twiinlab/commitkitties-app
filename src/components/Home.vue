@@ -110,8 +110,8 @@
                 this.showLoginForm = !this.showLoginForm
             },
             getMyKitties(){
-                if (!this.userProfile || !this.kitties) return [];
-                return this.kitties.filter(kitty => kitty.owner.address == this.userProfile.wallet.address );
+                if (!this.userProfile || !this.userProfile.wallet || !this.kitties) return [];
+                return this.kitties.filter(kitty => kitty.owner && kitty.owner.address == this.userProfile.wallet.address );
             },
             getOnSaleKitties(){
                 if (!this.kitties) return [];
