@@ -111,7 +111,9 @@
             },
             getMyKitties(){
                 if (!this.userProfile || !this.userProfile.wallet || !this.kitties) return [];
-                return this.kitties.filter(kitty => kitty.owner && kitty.owner.address == this.userProfile.wallet.address );
+                return this.kitties.filter(kitty => {
+                    return ((kitty.owner && kitty.owner.address).toUpperCase() == (this.userProfile.wallet.address).toUpperCase()) 
+                    });
             },
             getOnSaleKitties(){
                 if (!this.kitties) return [];

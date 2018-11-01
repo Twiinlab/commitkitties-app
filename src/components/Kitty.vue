@@ -77,7 +77,7 @@
             ...mapActions('kitties', ['fetchKittyById']),
             isMyKitty(){
                 if (!this.userProfile.wallet || !this.selectedKitty.owner) return false;
-                return this.userProfile.wallet.address == this.selectedKitty.owner.address;
+                return this.userProfile.wallet.address.toUpperCase() == this.selectedKitty.owner.address.toUpperCase()
             },
             isInAuction(){
                 return this.selectedKitty.auction.price;
