@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import firebase from 'firebase'
 
+import Landing from '@/components/Landing'
 import Home from '@/components/Home'
+import Ranking from '@/components/Ranking'
 import Dashboard from '@/components/Dashboard'
 import Kitty from '@/components/Kitty'
 import Settings from '@/components/Settings'
@@ -14,12 +16,18 @@ const router = new Router({
 	routes: [
 		{
 			path: '*',
-			redirect: '/home'
+			name: 'Landing',
+			component: Landing
 		},
 		{
 			path: '/home',
 			name: 'Home',
 			component: Home
+		},
+		{
+			path: '/ranking',
+			name: 'Ranking',
+			component: Ranking
 		},
         {
 			path: '/dashboard',
