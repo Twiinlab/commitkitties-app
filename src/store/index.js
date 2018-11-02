@@ -3,7 +3,8 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import users from './modules/users'
 import kitties from './modules/kitties'
-import * as contracts from './modules/contracts'
+import * as contracts from '../plugins/contracts'
+
 
 
 const fb = require('../firebaseConfig.js')
@@ -19,17 +20,17 @@ fb.auth.onAuthStateChanged(user => {
         // store.dispatch('users/fetchUserProfile')
 
         
-        fb.usersCollection.doc(user.uid).onSnapshot(doc => {
+        fb.usersCollection.doc(user.uid).onSnapshot( async doc => {
             if(doc.exists){
                 let userData = doc.data();
                 if (!userData.wallet) {
                     // create user wallet
-                    axios.post(`http://localhost:8080/api/users`, { id: user.uid, data: userData }).then(result => {
-                        console.log(result);
-                    })
+                    await axios.post(`http://localhost:8080/api/users`, { id: user.uid, data: userData });
+                } else {
+                    contracts.watchUserEvents(userData.wallet.address);
                 }
             }
-            else{
+            else {
                 // create user obj
                 fb.usersCollection.doc(user.uid).set({
                     userId: user.uid,
@@ -42,8 +43,9 @@ fb.auth.onAuthStateChanged(user => {
                     this.errorMsg = err.message
                 })
             }
-            store.commit('users/setUserProfile', doc.data())
-
+            await store.commit('users/setUserProfile', doc.data())
+            await store.dispatch('users/updateBalanceProfile');
+                    
             
         })
 

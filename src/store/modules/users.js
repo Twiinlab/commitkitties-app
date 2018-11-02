@@ -1,3 +1,5 @@
+import { web3Connection } from '../../plugins/contracts.js';
+import { METHODS } from 'http';
 const fb = require('../../firebaseConfig.js')
 
 export default {
@@ -6,6 +8,7 @@ export default {
     state: {
         currentUser: null,
         userProfile: {},
+        userBalance: 0,
         posts: [],
         hiddenPosts: []
     },
@@ -13,10 +16,10 @@ export default {
     getters: {
       currentUser: (state) => state.currentUser,
       userProfile: (state) => state.userProfile,
+      userBalance: (state) => state.userBalance,
       posts: (state) => state.posts,
       hiddenPosts: (state) => state.hiddenPosts
     },
-
     actions: {
         clearData({ commit }) {
             commit('setCurrentUser', null)
@@ -27,6 +30,7 @@ export default {
         fetchUserProfile({ commit, state }) {
             fb.usersCollection.doc(state.currentUser.uid).get().then(res => {
                 commit('setUserProfile', res.data())
+                
             }).catch(err => {
                 console.log(err)
             })
@@ -55,6 +59,12 @@ export default {
             }).catch(err => {
                 console.log(err)
             })
+        },
+        updateBalanceProfile({ commit, state }) {
+            if (!state.userProfile || !state.userProfile.wallet) return;
+            web3Connection.eth.getBalance(state.userProfile.wallet.address).then((newBalance)=>{
+                commit(`setUserBalance`, web3Connection.utils.fromWei(newBalance, 'ether'));
+            })
         }
     },
     mutations: {
@@ -63,6 +73,9 @@ export default {
         },
         setUserProfile(state, val) {
             state.userProfile = val
+        },
+        setUserBalance(state, val) {
+            state.userBalance = val
         },
         setPosts(state, val) {
             if (val) {

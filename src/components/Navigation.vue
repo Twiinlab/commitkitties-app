@@ -7,6 +7,7 @@
                     <li><router-link to="/home">Home</router-link></li>
                     <li><router-link to="/dashboard">Dashboard</router-link></li>
                     <li><router-link to="/settings">Settings</router-link></li>
+                    <li>{{userBalance}}</li>
                     <li><a @click="logout">logout</a></li>
                 </ul>
                 <ul v-else class="inline">
@@ -14,6 +15,7 @@
                     <li><router-link to="/dashboard">Dashboard</router-link></li>
                     <li><a @click="login">login</a></li>
                 </ul>
+                
             </div>
         </section>
     </header>
@@ -25,7 +27,7 @@
 
     export default {
         computed: {
-            ...mapState('users', ['currentUser'])
+            ...mapState('users', ['currentUser','userProfile','userBalance'])
         },
         methods: {
             logout() {

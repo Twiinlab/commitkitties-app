@@ -3,9 +3,8 @@ import Tx from 'ethereumjs-tx';
 
 
 // import config  from '@/config';
-const fb = require('../../firebaseConfig.js')
-const store = require('../index.js')
-
+const fb = require('../firebaseConfig.js')
+const store = require('../store/index')
 
 let web3 = undefined;
 
@@ -20,6 +19,7 @@ if (typeof web3 !== 'undefined') {
     web3 = new Web3(new Web3.providers.WebsocketProvider(`ws://localhost:8545`));
 }
 
+export const web3Connection = web3;
 
 // db.settings({ timestampsInSnapshots: true});
 export const createAccount = function() {
@@ -119,4 +119,36 @@ export const bidAuction = async (tokenId, price, wallet) => {
   return await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'));
 
 }
+
+async function dispatchUpdateUserBalanceEvent(event, address){
+  if (!event) return
+  console.log(`Listen Event ${JSON.stringify(event)}`);
+  store.default.dispatch('users/updateBalanceProfile')
+//   const newBalance = await web3.eth.getBalance(address);
+//   store.default.commit(`users/setUserBalance`, web3.utils.fromWei(newBalance, 'ether'));
+}
+
+export const watchUserEvents = async ( address ) => {
+
+  const { contract } = await getContract('KittyCore');
+
+  contract.events.Transfer({ filter: { _from: address }, fromBlock: 'latest' }, async (error, event) => {
+    if (error) { 
+      console.log(error)
+      return
+    }
+    dispatchUpdateUserBalanceEvent(event, address);
+    return
+  })
+
+  contract.events.Transfer({ filter: { _to: address }, fromBlock: 'latest' }, async (error, event) => {
+    if (error) { 
+      console.log(error)
+      return
+    }
+    dispatchUpdateUserBalanceEvent(event, address);
+    return
+  })
+}
+
 

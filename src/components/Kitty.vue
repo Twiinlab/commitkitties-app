@@ -54,7 +54,7 @@
 
 <script>
     const fb = require('../firebaseConfig.js')
-    const contracts = require('../store/modules/contracts')
+    const contracts = require('../plugins/contracts')
 
     import { mapState, mapGetters, mapActions } from 'vuex'
 
