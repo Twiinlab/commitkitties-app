@@ -10,7 +10,8 @@ export default {
         userProfile: {},
         userBalance: 0,
         posts: [],
-        hiddenPosts: []
+        hiddenPosts: [],
+        ranking: []
     },
 
     getters: {
@@ -18,7 +19,8 @@ export default {
       userProfile: (state) => state.userProfile,
       userBalance: (state) => state.userBalance,
       posts: (state) => state.posts,
-      hiddenPosts: (state) => state.hiddenPosts
+      hiddenPosts: (state) => state.hiddenPosts,
+      ranking: (state) => state.ranking
     },
     actions: {
         clearData({ commit }) {
@@ -65,6 +67,13 @@ export default {
             web3Connection.eth.getBalance(state.userProfile.wallet.address).then((newBalance)=>{
                 commit(`setUserBalance`, web3Connection.utils.fromWei(newBalance, 'ether'));
             })
+        },
+        fetchRanking({ commit, state }) {
+            fb.usersCollection.get().then(res => {
+                commit('setRanking', res.docs)
+            }).catch(err => {
+                console.log(err)
+            })
         }
     },
     mutations: {
@@ -92,6 +101,13 @@ export default {
                 }
             } else {
                 state.hiddenPosts = []
+            }
+        },
+        setRanking(state, val) {
+            if (val) {
+                state.ranking = val.map(d => d.data());
+            } else {
+                state.ranking = {}
             }
         }
     }

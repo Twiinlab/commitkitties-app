@@ -35,7 +35,8 @@ fb.auth.onAuthStateChanged(user => {
                 fb.usersCollection.doc(user.uid).set({
                     userId: user.uid,
                     displayName: user.displayName,
-                    email: user.email
+                    email: user.email,
+                    photoURL: user.photoURL
                 }).then(() => {
                     this.$store.dispatch('users/fetchUserProfile')
                 }).catch(err => {
