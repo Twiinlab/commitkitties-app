@@ -2,12 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import firebase from 'firebase'
 
-import Landing from '@/components/Landing'
 import Home from '@/components/Home'
+import Market from '@/components/Market'
 import Ranking from '@/components/Ranking'
 import Dashboard from '@/components/Dashboard'
 import Kitty from '@/components/Kitty'
-import Settings from '@/components/Settings'
+import Profile from '@/components/Profile'
 
 Vue.use(Router)
 
@@ -16,13 +16,13 @@ const router = new Router({
 	routes: [
 		{
 			path: '*',
-			name: 'Landing',
-			component: Landing
-		},
-		{
-			path: '/home',
 			name: 'Home',
 			component: Home
+		},
+		{
+			path: '/market',
+			name: 'Market',
+			component: Market
 		},
 		{
 			path: '/ranking',
@@ -43,9 +43,9 @@ const router = new Router({
 			component: Kitty
 		},
         {
-			path: '/settings',
-			name: 'Settings',
-			component: Settings,
+			path: '/profile',
+			name: 'Profile',
+			component: Profile,
             meta: {
                 requiresAuth: true
             }

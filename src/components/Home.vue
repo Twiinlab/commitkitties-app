@@ -2,7 +2,7 @@
     <div id="dashboard">
         <section>
             <div>
-                <h1>Market</h1>
+                <h1>Landing</h1>
                 <div class="profile">
                     <label>MY KITTIES</label>
                     <md-card v-if="(getMyKitties()).length == 0">

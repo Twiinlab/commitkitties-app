@@ -19,7 +19,6 @@ fb.auth.onAuthStateChanged(user => {
         // store.commit('users/setCurrentUser', user)
         // store.dispatch('users/fetchUserProfile')
 
-        
         fb.usersCollection.doc(user.uid).onSnapshot( async doc => {
             if(doc.exists){
                 let userData = doc.data();
