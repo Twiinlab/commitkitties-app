@@ -1,5 +1,5 @@
 <template>
-    <div id="dashboard">
+    <div id="dashboard" class="explainer-bg">
         <section>
             <div class="col2">
                 <h1>Ranking</h1>

@@ -1,5 +1,5 @@
 <template>
-    <section id="settings">
+    <section id="settings" class="explainer-bg">
         <div class="col1">
             <h3>Profile</h3>
             <p>Update your info</p>

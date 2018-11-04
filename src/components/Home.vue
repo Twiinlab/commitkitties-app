@@ -1,5 +1,17 @@
 <template>
-    <div id="dashboard">
+    <div id="dashboard" class="explainer-bg">
+        <section class="landing">
+            <div class="Explainer-what">
+                <div class="Explainer-ethKitty">
+                    <img src="https://www.cryptokitties.co/images/kitty-eth.svg" alt="Explanation">
+                </div>
+                <div class="Explainer-what-text">
+                    <h2 class="Explainer-headline">What is CryptoKitties?</h2>
+                    <p class="Explainer-description">CryptoKitties is a game centered around breedable, collectible, and oh-so-adorable creatures we call CryptoKitties! Each cat is one-of-a-kind and 100% owned by you; it cannot be replicated, taken away, or destroyed.</p>
+                    <div><md-button class="md-raised">Go to the Talk</md-button></div>
+                </div>
+            </div>
+        </section>
         <section>
             <div>
                 <h1>Landing</h1>
@@ -66,10 +78,45 @@
 </template>
 
 <style lang="scss" scoped>
+  
+  .landing{
+      display: grid;
+      background-color: white;
+      text-align: center;
+      margin: 0px 6rem;
+  }
+  
+  .Explainer-what{
+      display: flex;
+      flex-direction: row;
+      max-width: 100%;
+      padding: 1.5rem;
+  }
+  .Explainer-ethKitty {
+      position: relative;
+      width: 100%;
+  }
+  .Explainer-ethKitty:after {
+      content: "";
+      position: absolute;
+      top: -2rem;
+      left: 0;
+      right: 0;
+      width: 6.5rem;
+      height: 6.5rem;
+      margin: auto;
+      background-image: url(https://www.cryptokitties.co/images/ether-diamond.gif);
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: top;
+  }
+  #dashboard{
+      padding: 2rem;
+  }
+
   .profile{
       display: grid;
   }
-
   .scrolling-wrapper{
     //overflow-x: scroll;
     overflow-x: auto;

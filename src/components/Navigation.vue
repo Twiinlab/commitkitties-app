@@ -16,12 +16,38 @@
                     <li><router-link to="/ranking">Ranking</router-link></li>
                     <li><router-link to="/market">Market</router-link></li>
                     <li><a @click="login">login</a></li>
+                    <!-- <md-menu md-direction="bottom-start">
+                        <md-button md-menu-trigger>
+                            <md-list-item class="md-dense" style="top:-15px;">
+                                <md-avatar>
+                                    <img src="https://placeimg.com/40/40/people/1" alt="People">
+                                </md-avatar>
+                                <div class="md-list-item-text">
+                                    <span>Ali Connors</span>
+                                    <span>Brunch this weekend?</span>
+                                </div>
+                            </md-list-item>
+                        </md-button>
+                        <md-menu-content>
+                            <md-menu-item>My Item 1</md-menu-item>
+                            <md-menu-item>My Item 2</md-menu-item>
+                            <md-menu-item>My Item 3</md-menu-item>
+                        </md-menu-content>
+                    </md-menu> -->
                 </ul>
-                
             </div>
         </section>
     </header>
 </template>
+
+<style scoped>
+
+header{
+    top: 0px;
+    position: sticky;
+}
+
+</style>
 
 <script>
     import { mapState } from 'vuex'

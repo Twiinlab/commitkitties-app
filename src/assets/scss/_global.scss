@@ -38,7 +38,7 @@ h3,
 h4,
 h5,
 p {
-	margin: 0 0 0.5rem;
+	margin: 1rem 0 0.5rem;
 }
 
 h1 {
@@ -214,4 +214,10 @@ form {
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;
+}
+
+.explainer-bg{
+	background-color: #f3f1ee;
+	background-image: url(https://www.cryptokitties.co/images/pattern-tile.svg);
+	background-size: 25rem auto;
 }

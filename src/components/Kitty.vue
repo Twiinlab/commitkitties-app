@@ -1,5 +1,5 @@
 <template>
-    <div id="dashboard">
+    <div id="dashboard" class="explainer-bg">
         <section>
             <div>
                 <h1>Kitty On Sale</h1>
