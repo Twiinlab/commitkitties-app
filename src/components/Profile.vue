@@ -37,7 +37,7 @@
                                         </md-card-media>
                                         <md-card-header>
                                             <div class="md-subhead">{{kitty.name|truncate(30)}}</div>
-                                            <div class="md-subhead">Ξ  0.020</div>
+                                            <div class="md-subhead">Ξ {{ kitty.value|weitoether(4) }}</div>
                                         </md-card-header>                           
                                     </md-card>
                                 </router-link>

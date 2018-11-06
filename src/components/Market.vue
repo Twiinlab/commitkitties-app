@@ -21,7 +21,7 @@
                                 </md-card-media>
                                 <md-card-header>
                                     <div class="md-subhead">{{kitty.name|truncate(30)}}</div>
-                                    <div class="md-subhead">Ξ  0.020</div>
+                                    <div class="md-subhead">Ξ  {{ kitty.value|weitoether(4) }}</div>
                                 </md-card-header>                           
                             </md-card>
                         </router-link>
@@ -35,7 +35,7 @@
                                 </md-card-media>
                                 <md-card-header>
                                     <div class="md-subhead">{{kitty.name|truncate(30)}}</div>
-                                    <div class="md-subhead">Ξ  0.020</div>
+                                    <div class="md-subhead">Ξ  {{ kitty.value|weitoether(4) }}</div>
                                 </md-card-header>                                
                             </md-card>
                         </router-link>
@@ -49,7 +49,7 @@
                                 </md-card-media>
                                 <md-card-header>
                                     <div class="md-subhead">{{kitty.name|truncate(30)}}</div>
-                                    <div class="md-subhead">Ξ  0.020</div>
+                                    <div class="md-subhead">Ξ {{ kitty.value|weitoether(4) }}</div>
                                 </md-card-header>                                
                             </md-card>
                         </router-link>
@@ -118,14 +118,6 @@
             getOnSaleKitties(){
                 if (!this.kitties) return [];
                 return this.kitties.filter(kitty => kitty.auction.price );
-            }
-        },
-        filters: {
-            truncate: function(value, limit) {
-                if (value && value.length > limit) {
-                    value = value.substring(0, (limit - 3)) + '...';
-                }
-                return value
             }
         }
     }

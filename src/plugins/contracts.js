@@ -106,7 +106,7 @@ export const bidAuction = async (tokenId, price, wallet) => {
       "nonce": web3.utils.toHex(nonce),
       "gasPrice": web3.utils.toHex(gasPrice), // '0x' + estimatedGas,
       "gasLimit": web3.utils.toHex(gasLimit),
-      "value": price,
+      "value": web3.utils.toHex(price),//web3.utils.toHex(web3.utils.fromWei(price, 'ether')),
       "to": address,
       "data": functionAbi,
       // "chainId": 4 //rinkeby //remember to change this
