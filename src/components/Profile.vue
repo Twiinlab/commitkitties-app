@@ -45,29 +45,16 @@
                         </md-tab>
                         <md-tab id="tab-pages" md-label="Activity" >
                             <md-list class="md-double-line">
-                                <md-list-item>
-                                    <md-icon class="md-primary">shopping_cart</md-icon>
-                                    <div class="md-list-item-text">
-                                        <span>Kitty Purchase</span>
-                                        <span>Ξ  0.050</span>
-                                    </div>
-                                </md-list-item>
-                                <md-divider class="md-inset"></md-divider>
-                                <md-list-item>
-                                    <md-icon class="md-primary">swap_horiz</md-icon>
-                                    <div class="md-list-item-text">
-                                        <span>Kitty Exchange</span>
-                                        <span>Ξ  0.065</span>
-                                    </div>
-                                </md-list-item>
-                                <md-divider class="md-inset"></md-divider>
-                                <md-list-item>
-                                    <md-icon class="md-primary">add_shopping_cart</md-icon>
-                                    <div class="md-list-item-text">
-                                        <span>Kitty Publication</span>
-                                        <span>Ξ  0.135</span>
-                                    </div>
-                                </md-list-item>
+                                <div v-for="activity in userActivity" v-bind:key="activity.id">
+                                    <md-list-item >
+                                        <md-icon class="md-primary">{{getIcon(activity.type)}}</md-icon>
+                                        <div class="md-list-item-text">
+                                            <span>{{activity.type}}</span>
+                                            <span>Ξ  {{activity.tx.value|weitoether(4)}}</span>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider class="md-inset"></md-divider>
+                                </div>
                             </md-list>
                         </md-tab>
                     </md-tabs>
@@ -92,7 +79,7 @@
             this.fetchMyKitties('Ix0Mo3CbhbegnTft36X0yCUWnhJ3');
         },
         computed: {
-            ...mapGetters('users', ['userProfile']),
+            ...mapGetters('users', ['userProfile','userActivity']),
             ...mapGetters('kitties', ['myKitties'])
         },
         methods: {
@@ -109,6 +96,18 @@
                 this.showSuccess = true
 
                 setTimeout(() => { this.showSuccess = false }, 2000)
+            },
+            getIcon(type){ 
+                switch(type) {
+                    case "Transfer":
+                        return "shopping_cart"
+                    case "AuctionCreated":
+                        return "add_shopping_cart"
+                    case "AuctionSuccessful":
+                        return "swap_horiz"
+                    default:
+                        return "shopping_cart"
+                }
             }
         }
     }

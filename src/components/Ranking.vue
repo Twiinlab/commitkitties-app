@@ -4,16 +4,39 @@
             <div class="col2">
                 <h1>Ranking</h1>
                 <div class="profile">
-                    <label>TOP USERS</label>
+                    <md-table v-model="ranking" md-sort="balance" md-sort-order="desc" md-card>
+                        <md-table-toolbar>
+                            <h1 class="md-title">Top Users</h1>
+                        </md-table-toolbar>
+                        <md-table-row slot="md-table-row" slot-scope="{ item }">
+                            <md-table-cell md-numeric>{{ item.count }}</md-table-cell>
+                            <md-table-cell md-label="User" md-sort-by="name">
+                                <md-list-item style="display: block;"> 
+                                    <md-avatar>
+                                        <img v-if="item.user.photoURL" v-bind:src="item.user.photoURL" alt="People">
+                                    </md-avatar>
+                                    <div class="md-list-item-text">
+                                        <span>{{item.user.displayName}}</span>
+                                        <span>{{item.user.email}}</span>
+                                    </div>
+                                </md-list-item>
+                            </md-table-cell>
+                            <md-table-cell md-label="#Kitties" >{{ item.kitties.length }}</md-table-cell>
+                            <md-table-cell md-label="Gas" >{{ item.gas }}</md-table-cell>
+                            <md-table-cell md-label="Balance" md-sort-by="balance">{{ item.balance }}</md-table-cell>
+                        </md-table-row>
+                    </md-table>
+                    <br><br>
+                    <label><h2>TOP USERS</h2></label>
                     <md-list class="md-triple-line">
-                        <md-list-item v-for="user in ranking" v-bind:key="user.id" >
+                        <md-list-item v-for="userRank in ranking" v-bind:key="userRank.id" >
                             <md-avatar>
-                                <img v-if="user.photoURL" v-bind:src="user.photoURL" alt="People">
+                                <img v-if="userRank.user.photoURL" v-bind:src="userRank.user.photoURL" alt="People">
                             </md-avatar>
                             <div class="md-list-item-text">
-                                <span>{{user.displayName}}</span>
-                                <span>{{user.email}}</span>
-                                <p><b>Balance:</b> Ξ  0.020</p>
+                                <span>{{userRank.user.displayName}}</span>
+                                <span>{{userRank.user.email}}</span>
+                                <p><b>Balance:</b> Ξ  {{userRank.balance}}</p>
                             </div>
                             <md-button class="md-icon-button md-list-action">
                                 <md-icon class="md-primary">star</md-icon>
