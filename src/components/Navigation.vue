@@ -57,6 +57,9 @@ header{
         computed: {
             ...mapState('users', ['currentUser','userProfile','userBalance'])
         },
+        created() {
+            //const isAuthenticated = fb.auth().currentUser;
+        },
         methods: {
             logout() {
                 fb.auth.signOut().then(() => {

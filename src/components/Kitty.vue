@@ -1,38 +1,37 @@
 <template>
     <div id="dashboard" class="explainer-bg">
         <section>
-            <div>
-                <h1>Kitty On Sale</h1>
+            <div class="col1">
                 <div class="profile">
-                    <md-card v-if="selectedKitty" >
-                        <md-card-media>
-                            <img v-if="selectedKitty.image_url" v-bind:src="selectedKitty.image_url" alt="People">
-                        </md-card-media>
-                        <md-card-header>
-                            <div class="md-subhead">{{selectedKitty.name|truncate(30)}}</div>
-                            <div class="md-subhead">Ξ  {{ selectedKitty.value|weitoether(4) }}</div>
-                        </md-card-header>
-                        <md-card-expand>
-                            <md-card-actions md-alignment="space-between">
-                                <div>
-                                    <md-button v-if="!isMyKitty()" @click.native="onBuyKitty()">Buy</md-button>
-                                    <div v-if="isMyKitty() && !isInAuction()">
-                                        <input v-model="kittyPrice" type="number"/>
-                                        <md-button  @click.native="onPutOnSaleKitty()">Put on Sale</md-button>
-                                    </div>
-                                </div>
-                                <md-card-expand-trigger>
-                                    <md-button class="md-icon-button">
-                                    <md-icon>keyboard_arrow_down</md-icon>
-                                    </md-button>
-                                </md-card-expand-trigger>
-                            </md-card-actions>
-                            <md-card-expand-content>
-                                <md-card-content>
-                                    {{selectedKitty.bio}}
-                                </md-card-content>
-                            </md-card-expand-content>
-                        </md-card-expand>
+                    <img v-if="selectedKitty.image_url" v-bind:src="selectedKitty.image_url" alt="People">
+                </div>
+            </div>
+            <div class="col2">
+                <div class="profile">
+                    <h1>{{selectedKitty.name}}</h1>
+                    <h3>Bio</h3>
+                    <p>{{selectedKitty.bio}}</p>
+                    <md-card>
+                        <md-card-area>
+                          <md-card-content>
+                              <div class="saletag">  
+                                  <div>
+                                    <p>Value:</p>
+                                    <h2>Ξ  {{ selectedKitty.value|weitoether(4) }}</h2>
+                                  </div>
+                                  <div>
+                                    <p>New Prize:</p>
+                                    <h2>Ξ  <input  style="font-size: inherit;" value="0.0072" type="number"/></h2>
+                                  </div>
+                              </div>  
+                          </md-card-content>
+                        </md-card-area>
+                        <md-card-actions md-alignment="left">
+                            <md-button class="md-primary md-raised" v-if="!isMyKitty()" @click.native="onBuyKitty()" style="width: 200px;">Buy</md-button>
+                            <div v-if="isMyKitty() && !isInAuction()">
+                                <md-button class="md-primary md-raised" @click.native="onPutOnSaleKitty()">Put on Sale</md-button>
+                            </div>
+                        </md-card-actions>
                     </md-card>
                 </div>
             </div>
@@ -41,11 +40,18 @@
 </template>
 
 <style lang="scss" scoped>
+  .saletag{
+      display: flex;
+      align-items: center;
+  }
+  .saletag > div {
+        flex: 1;
+  }
   .profile{
       display: grid;
   }
   .md-card {
-    width: 240px;
+    width: 100%;
     margin: 4px;
     display: inline-block;
     vertical-align: top;
@@ -90,14 +96,6 @@
                 contracts.invokeMethod('createSaleAuction', [this.selectedKitty.id, this.kittyPrice, this.kittyPrice, this.kittyPrice], this.userProfile.wallet).then(()=>{
                     console.log(`createSaleAuction kittyId: ${this.selectedKitty.id} price: ${this.kittyPrice}`)
                 })
-            }
-        },
-        filters: {
-            truncate: function(value, limit) {
-                if (value && value.length > limit) {
-                    value = value.substring(0, (limit - 3)) + '...';
-                }
-                return value
             }
         }
     }
