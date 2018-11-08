@@ -57,9 +57,6 @@ header{
         computed: {
             ...mapState('users', ['currentUser','userProfile','userBalance'])
         },
-        created() {
-            //const isAuthenticated = fb.auth().currentUser;
-        },
         methods: {
             logout() {
                 fb.auth.signOut().then(() => {
@@ -75,6 +72,7 @@ header{
                     //TODO: following calls don't interact but don't crash neither ;) 
                     this.$store.commit('users/setCurrentUser', user)
                     this.$store.dispatch('users/fetchUserProfile')
+                    this.$store.dispatch('users/fetchUserActivity')
                 })
                 .catch(err => {
                     console.log(err)

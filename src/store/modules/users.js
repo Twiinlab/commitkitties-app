@@ -9,6 +9,7 @@ export default {
     state: {
         currentUser: null,
         userProfile: {},
+        userActivity: [],
         userBalance: 0,
         posts: [],
         hiddenPosts: [],
@@ -18,6 +19,7 @@ export default {
     getters: {
       currentUser: (state) => state.currentUser,
       userProfile: (state) => state.userProfile,
+      userActivity: (state) => state.userActivity,
       userBalance: (state) => state.userBalance,
       posts: (state) => state.posts,
       hiddenPosts: (state) => state.hiddenPosts,
@@ -27,13 +29,20 @@ export default {
         clearData({ commit }) {
             commit('setCurrentUser', null)
             commit('setUserProfile', {})
+            commit('setUserActivity', null)
             commit('setPosts', null)
             commit('setHiddenPosts', null)
         },
         fetchUserProfile({ commit, state }) {
             fb.usersCollection.doc(state.currentUser.uid).get().then(res => {
-                commit('setUserProfile', res.data())
-                
+                commit('setUserProfile', res.data())       
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+        fetchUserActivity({ commit, state }) {
+            axios.get('http://localhost:8080/api/kpis/userid/'+state.currentUser.uid).then(res => {
+                commit('setUserActivity', res)       
             }).catch(err => {
                 console.log(err)
             })
@@ -84,6 +93,9 @@ export default {
         },
         setUserProfile(state, val) {
             state.userProfile = val
+        },
+        setUserActivity(state, val) {
+            state.userActivity = val.data
         },
         setUserBalance(state, val) {
             state.userBalance = val
