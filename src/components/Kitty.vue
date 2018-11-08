@@ -1,8 +1,10 @@
 <template>
     <div id="dashboard" class="explainer-bg">
+        <app-loader />
         <section>
             <div>
                 <h1>Kitty On Sale</h1>
+                <!-- <spinner :condition="false"></spinner> -->
                 <div class="profile">
                     <md-card v-if="selectedKitty" >
                         <md-card-media>
@@ -56,9 +58,18 @@
     const fb = require('../firebaseConfig.js')
     const contracts = require('../plugins/contracts')
 
+
     import { mapState, mapGetters, mapActions } from 'vuex'
+    import Spinner from "@/components/Spinner";
+    import AppLoader from "@/components/AppLoader";
+    import { LOADER } from '../store/modules/loader';
+
 
     export default {
+        components: {
+            Spinner,
+            AppLoader
+        },
         data() {
             return {
                 errorMsg: ''
@@ -74,6 +85,7 @@
         },
         methods: {
             ...mapActions('kitties', ['fetchKittyById']),
+            // ...mapActions('loader', ['loaderToggle']),
             isMyKitty(){
                 if (!this.userProfile.wallet || !this.selectedKitty.owner) return false;
                 return this.userProfile.wallet.address.toUpperCase() == this.selectedKitty.owner.address.toUpperCase()
@@ -82,22 +94,29 @@
                 return this.selectedKitty.auction.price;
             },
             onBuyKitty(){
-                contracts.bidAuction(this.selectedKitty.id, this.selectedKitty.auction.price, this.userProfile.wallet).then(()=>{
-                    console.log(`bidAuction kittyId: ${this.selectedKitty.id} price: ${this.selectedKitty.auction.price}`)
-                })
+              try {
+                
+                  this.$store.dispatch(`loader/${LOADER.TOGGLE}`, true, { root: true });
+                  contracts.bidAuction(this.selectedKitty.id, this.selectedKitty.auction.price, this.userProfile.wallet).then(()=>{
+                      console.log(`bidAuction kittyId: ${this.selectedKitty.id} price: ${this.selectedKitty.auction.price}`)
+                  })
+                } catch (error) {
+                  //Notification error
+                } finally {
+                //    this.$store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
+                }
             },
             onPutOnSaleKitty(){
+              try {
+                this.$store.dispatch(`loader/${LOADER.TOGGLE}`, true, { root: true });
                 contracts.invokeMethod('createSaleAuction', [this.selectedKitty.id, this.kittyPrice, this.kittyPrice, this.kittyPrice], this.userProfile.wallet).then(()=>{
                     console.log(`createSaleAuction kittyId: ${this.selectedKitty.id} price: ${this.kittyPrice}`)
                 })
-            }
-        },
-        filters: {
-            truncate: function(value, limit) {
-                if (value && value.length > limit) {
-                    value = value.substring(0, (limit - 3)) + '...';
-                }
-                return value
+              } catch (error) {
+                //Notification error                
+              } finally {
+                // this.$store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
+              }
             }
         }
     }

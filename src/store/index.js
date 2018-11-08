@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import users from './modules/users'
 import kitties from './modules/kitties'
+import loader from './modules/loader'
+
 import * as contracts from '../plugins/contracts'
 
 
@@ -83,7 +85,8 @@ fb.auth.onAuthStateChanged(user => {
 const store = new Vuex.Store({
   modules: {
     users,
-    kitties
+    kitties,
+    loader
   }
 })
 
