@@ -21,15 +21,17 @@
                                     <p>Value:</p>
                                     <h2>Ξ  {{ selectedKitty.value|weitoether(4) }}</h2>
                                   </div>
-                                  <div>
+                                  <div v-if="isMyKitty() && !isInAuction()">
                                     <p>New Prize:</p>
-                                    <h2>Ξ  <input  style="font-size: inherit;" value="0.0072" type="number"/></h2>
+                                    <h2>Ξ  <input  style="font-size: inherit;" :value="selectedKitty.value|weitoether(4)" type="number"/></h2>
                                   </div>
                               </div>  
                           </md-card-content>
                         </md-card-area>
                         <md-card-actions md-alignment="left">
-                            <md-button class="md-primary md-raised" v-if="!isMyKitty()" @click.native="onBuyKitty()" style="width: 200px;">Buy</md-button>
+                            <div v-if="!isMyKitty() && isInAuction()">
+                                <md-button class="md-primary md-raised" @click.native="onBuyKitty()" style="width: 200px;">Buy</md-button>
+                            </div>
                             <div v-if="isMyKitty() && !isInAuction()">
                                 <md-button class="md-primary md-raised" @click.native="onPutOnSaleKitty()">Put on Sale</md-button>
                             </div>
@@ -109,6 +111,7 @@
                 } catch (error) {
                   //Notification error
                 } finally {
+                    this.fetchKittyById(this.$route.params.id);
                     this.$store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
                 }
             },
@@ -121,6 +124,7 @@
               } catch (error) {
                 //Notification error                
               } finally {
+                    this.fetchKittyById(this.$route.params.id);
                     this.$store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
               }
             }

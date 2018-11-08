@@ -3,19 +3,30 @@
         <section>
             <div class="col1">
                 <router-link to="/home"><h3>CommitKitties</h3></router-link>
-                <ul v-if="currentUser" class="inline">
+                <ul v-if="userProfile.userId" class="inline">
                     <li><router-link to="/home">Home</router-link></li>
                     <li><router-link to="/ranking">Ranking</router-link></li>
                     <li><router-link to="/market">Market</router-link></li>
                     <li><router-link to="/profile">Profile</router-link></li>
-                    <li>{{userBalance}}</li>
                     <li><a @click="logout">logout</a></li>
+                    <li>
+                        <md-list-item class="md-dense" style="top:-15px;">
+                        <md-avatar>
+                            <img :src="userProfile.photoURL" alt="People">
+                        </md-avatar>
+                        <div class="md-list-item-text">
+                            <span>{{userProfile.displayName}}</span>
+                            <span>Ξ {{userBalance}}</span>
+                        </div>
+                        </md-list-item>
+                    </li>
                 </ul>
                 <ul v-else class="inline">
                     <li><router-link to="/home">Home</router-link></li>
                     <li><router-link to="/ranking">Ranking</router-link></li>
                     <li><router-link to="/market">Market</router-link></li>
                     <li><a @click="login">login</a></li>
+
                     <!-- <md-menu md-direction="bottom-start">
                         <md-button md-menu-trigger>
                             <md-list-item class="md-dense" style="top:-15px;">

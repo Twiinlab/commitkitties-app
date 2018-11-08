@@ -100,23 +100,6 @@ export default {
         setUserBalance(state, val) {
             state.userBalance = val
         },
-        setPosts(state, val) {
-            if (val) {
-                state.posts = val
-            } else {
-                state.posts = []
-            }
-        },
-        setHiddenPosts(state, val) {
-            if (val) {
-                // make sure not to add duplicates
-                if (!state.hiddenPosts.some(x => x.id === val.id)) {
-                    state.hiddenPosts.unshift(val)
-                }
-            } else {
-                state.hiddenPosts = []
-            }
-        },
         setRanking(state, val) {
             if (val) {
                 state.ranking = val.data;

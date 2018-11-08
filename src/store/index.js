@@ -48,37 +48,8 @@ fb.auth.onAuthStateChanged(user => {
             await store.commit('users/setUserProfile', doc.data())
             await store.dispatch('users/updateBalanceProfile');
                     
-            
         })
 
-        // realtime updates from our posts collection
-        fb.postsCollection.orderBy('createdOn', 'desc').onSnapshot(querySnapshot => {
-            // check if created by currentUser
-            let createdByCurrentUser
-            if (querySnapshot.docs.length && store.getters['users/currentUser']) {
-                createdByCurrentUser = store.getters['users/currentUser'].uid == querySnapshot.docChanges[0].doc.data().userId ? true : false
-            }
-
-            // add new posts to hiddenPosts array after initial load
-            if (querySnapshot.docChanges.length !== querySnapshot.docs.length
-                && querySnapshot.docChanges[0].type == 'added' && !createdByCurrentUser) {
-
-                let post = querySnapshot.docChanges[0].doc.data()
-                post.id = querySnapshot.docChanges[0].doc.id
-
-                store.commit('users/setHiddenPosts', post)
-            } else {
-                let postsArray = []
-
-                querySnapshot.forEach(doc => {
-                    let post = doc.data()
-                    post.id = doc.id
-                    postsArray.push(post)
-                })
-
-                store.commit('users/setPosts', postsArray)
-            }
-        })
     }
 })
 
