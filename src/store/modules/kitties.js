@@ -7,14 +7,15 @@ export default {
     namespaced: true,
 
     state: {
-        kitties: [],
+        sampleKitties: [],
         onSaleKitties: [],
         myKitties: [],
-        selectedKitty: {}
+        selectedKitty: {},
+        sampleLimit: 25
     },
 
     getters: {
-        kitties: (state) => state.kitties,
+        sampleKitties: (state) => state.sampleKitties,
         onSaleKitties: (state) => state.onSaleKitties,
         myKitties: (state) => state.myKitties,
         selectedKitty: (state) => state.selectedKitty
@@ -22,14 +23,16 @@ export default {
 
     actions: {
         clearData({ commit }) {
-            commit('setKitties', null)
-        },
-        clearSelectedKitty({ commit }) {
-            commit('setKitties', null)
+            commit('setMyKitties', null)
         },
         fetchKitties({ commit, state }) {
             fb.kittiesCollection.get().then(res => {
                 commit('setKitties', res.docs)
+            })
+        },
+        fetchSampleKitties({ commit, state }) {
+            fb.kittiesCollection.limit(state.sampleLimit).get().then(res => {
+                commit('setSampleKitties', res.docs)
             }).catch(err => {
                 console.log(err)
             })
@@ -41,8 +44,8 @@ export default {
                 console.log(err)
             })
         },
-        fetchOnSaleKitties({ commit, state }, data) {
-            fb.kittiesCollection.where("generation","==",data).get().then(res => {
+        fetchOnSaleKitties({ commit, state }) {
+            fb.kittiesCollection.where("auction.price",">","0").get().then(res => {
                 commit('setOnSaleKitties', res.docs)
             }).catch(err => {
                 console.log(err)
@@ -51,7 +54,7 @@ export default {
         fetchMyKitties({ commit, state }, data) {
             store.dispatch(`loader/${LOADER.TOGGLE}`, true, { root: true });
             try {
-                fb.kittiesCollection.where("owner.userId","==",data).get().then( res => {
+                fb.kittiesCollection.where("owner.address","==",data).get().then(res => {
                     commit('setMyKitties', res.docs);
                 }).catch(error => {
                     console.log(error)
@@ -90,11 +93,11 @@ export default {
         }
     },
     mutations: {
-        setKitties(state, val) {
+        setSampleKitties(state, val) {
             if (val) {
-                state.kitties = val.map(d => d.data());
+                state.sampleKitties = val.map(d => d.data());
             } else {
-                state.kitties = []
+                state.sampleKitties = []
             }
         },
         setOnSaleKitties(state, val) {
@@ -112,11 +115,7 @@ export default {
             }
         },
         setMyKitties(state, val) {
-            if (val) {
-                state.myKitties = val.map(d => d.data());
-            } else {
-                state.myKitties = {}
-            }
+            state.myKitties = val ? val.map(d => d.data()) : [];
         }
     }
 };

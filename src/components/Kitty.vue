@@ -95,14 +95,14 @@
             this.kittyPrice = parseFloat(this.$options.filters.weitoether(this.selectedKitty.value, 4));
         },
         destroyed(){
-            this.clearSelectedKitty();
+            this.clearData();
         },
         computed: {
             ...mapGetters('kitties', ['selectedKitty']),
             ...mapState('users', ['userProfile'])
         },
         methods: {
-            ...mapActions('kitties', ['fetchKittyById','clearSelectedKitty']),
+            ...mapActions('kitties', ['fetchKittyById','clearData']),
             getAuctionPrice(){
             if (!this.selectedKitty.auction || !this.selectedKitty.auction.price) {
                 return this.$options.filters.weitoether(this.selectedKitty.value, 4);
