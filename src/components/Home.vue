@@ -3,7 +3,7 @@
         <section class="landing">
             <div class="Explainer-what">
                 <div class="Explainer-ethKitty">
-                    <img src="https://www.cryptokitties.co/images/kitty-eth.svg" alt="Explanation">
+                    <img src="@/assets/images/kitty-eth.svg" alt="Explanation">
                 </div>
                 <div class="Explainer-what-text">
                     <h2 class="Explainer-headline">Lets kill the hype, BlockChain gets real</h2>
@@ -77,7 +77,7 @@
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss" scoped >
 .landing {
   display: grid;
   background-color: white;
@@ -104,7 +104,7 @@
   width: 6.5rem;
   height: 6.5rem;
   margin: auto;
-  background-image: url(https://www.cryptokitties.co/images/ether-diamond.gif);
+  background-image: url('../assets/images/ether-diamond.gif');
   background-repeat: no-repeat;
   background-size: contain;
   background-position: top;
