@@ -1,4 +1,7 @@
 const fb = require('../../firebaseConfig.js');
+import { LOADER } from './loader';
+import store from '../../store';
+
 
 export default {
     namespaced: true,
@@ -21,6 +24,9 @@ export default {
         clearData({ commit }) {
             commit('setKitties', null)
         },
+        clearSelectedKitty({ commit }) {
+            commit('setKitties', null)
+        },
         fetchKitties({ commit, state }) {
             fb.kittiesCollection.get().then(res => {
                 commit('setKitties', res.docs)
@@ -30,7 +36,7 @@ export default {
         },
         fetchKittyById({ commit, state }, data) {
             fb.kittiesCollection.where("id","==",data).get().then(res => {
-                commit('setSalectedKitty', res.docs[0]);
+                commit('setSelectedKitty', res.docs[0]);
             }).catch(err => {
                 console.log(err)
             })
@@ -43,11 +49,18 @@ export default {
             })
         },
         fetchMyKitties({ commit, state }, data) {
-            fb.kittiesCollection.where("owner.userId","==",data).get().then(res => {
-                commit('setMyKitties', res.docs)
-            }).catch(err => {
-                console.log(err)
-            })
+            store.dispatch(`loader/${LOADER.TOGGLE}`, true, { root: true });
+            try {
+                fb.kittiesCollection.where("owner.userId","==",data).get().then( res => {
+                    commit('setMyKitties', res.docs);
+                }).catch(error => {
+                    console.log(error)
+                }).then(() =>{
+                    store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
+                });
+            } finally{
+                store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
+            }
         },
         updateKittie({ commit, state }, data) {
             console.log('updateKittie');
@@ -91,7 +104,7 @@ export default {
                 state.onSaleKitties = []
             }
         },
-        setSalectedKitty(state, val) {
+        setSelectedKitty(state, val) {
             if (val) {
                 state.selectedKitty = val.data();
             } else {

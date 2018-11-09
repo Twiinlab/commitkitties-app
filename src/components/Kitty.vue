@@ -13,17 +13,18 @@
                     <h1>{{selectedKitty.name}}</h1>
                     <h3>Bio</h3>
                     <p>{{selectedKitty.bio}}</p>
+                    <p><span class="md-subheading">Value:</span> Ξ {{ selectedKitty.value|weitoether(4) }}</p>
                     <md-card>
                         <md-card-area>
                           <md-card-content>
                               <div class="saletag">  
                                   <div>
-                                    <p>Value:</p>
-                                    <h2>Ξ  {{ selectedKitty.value|weitoether(4) }}</h2>
+                                    <p><span class="md-subheading">Auction price:</span></p>
+                                    <h2>Ξ {{getAuctionPrice()}}</h2>
                                   </div>
                                   <div v-if="isMyKitty() && !isInAuction()">
-                                    <p>New Prize:</p>
-                                    <h2>Ξ  <input  style="font-size: inherit;" :value="kittyPrice" type="number"/></h2>
+                                    <p><span class="md-subheading">New Prize:</span></p>
+                                    <h2>Ξ  <input  style="font-size: inherit;" v-model="kittyPrice" :placeholder="kittyPrice" type="number"/></h2>
                                   </div>
                               </div>  
                           </md-card-content>
@@ -33,7 +34,7 @@
                                 <md-button class="md-primary md-raised" @click.native="onBuyKitty()" style="width: 200px;">Buy</md-button>
                             </div>
                             <div v-if="isMyKitty() && !isInAuction()">
-                                <md-button class="md-primary md-raised" @click.native="onPutOnSaleKitty()">Put on Sale</md-button>
+                                <md-button class="md-primary md-raised" @click.native="onPutOnSaleKitty(newPrice)">Put on Sale</md-button>
                             </div>
                         </md-card-actions>
                     </md-card>
@@ -81,7 +82,8 @@
         data() {
             return {
                 errorMsg: '',
-                kittyPrice: 0
+                kittyPrice: 0,
+                newPrice: null
             }
         },
         created() {
@@ -89,18 +91,23 @@
             console.log("selectedKitty:"+this.selectedKitty);
             this.kittyPrice = 0;
         },
-        updated() {
-            this.defaultPrice();
+        mounted() {
+            this.kittyPrice = parseFloat(this.$options.filters.weitoether(this.selectedKitty.value, 4));
+        },
+        destroyed(){
+            this.clearSelectedKitty();
         },
         computed: {
             ...mapGetters('kitties', ['selectedKitty']),
             ...mapState('users', ['userProfile'])
         },
         methods: {
-            ...mapActions('kitties', ['fetchKittyById']),
-            defaultPrice(){
-                debugger;
-                this.kittyPrice = this.$options.filters.weitoether(this.selectedKitty.value, 4);
+            ...mapActions('kitties', ['fetchKittyById','clearSelectedKitty']),
+            getAuctionPrice(){
+            if (!this.selectedKitty.auction || !this.selectedKitty.auction.price) {
+                return this.$options.filters.weitoether(this.selectedKitty.value, 4);
+            }
+            return this.$options.filters.weitoether(this.selectedKitty.auction.price, 4);
             },
             isMyKitty(){
                 if (!this.userProfile.wallet || !this.selectedKitty.owner) return false;
@@ -123,7 +130,7 @@
                     this.$store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
                 }
             },
-            onPutOnSaleKitty(){
+            onPutOnSaleKitty(customPrice){
               try {
                 this.$store.dispatch(`loader/${LOADER.TOGGLE}`, true, { root: true });
                 const price = this.$options.filters.ethertowei(this.kittyPrice);
