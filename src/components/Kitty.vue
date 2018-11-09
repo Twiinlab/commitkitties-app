@@ -23,7 +23,7 @@
                                   </div>
                                   <div v-if="isMyKitty() && !isInAuction()">
                                     <p>New Prize:</p>
-                                    <h2>Ξ  <input  style="font-size: inherit;" :value="selectedKitty.value|weitoether(4)" type="number"/></h2>
+                                    <h2>Ξ  <input  style="font-size: inherit;" :value="kittyPrice" type="number"/></h2>
                                   </div>
                               </div>  
                           </md-card-content>
@@ -80,12 +80,17 @@
         },
         data() {
             return {
-                errorMsg: ''
+                errorMsg: '',
+                kittyPrice: 0
             }
         },
         created() {
             this.fetchKittyById(this.$route.params.id);
             console.log("selectedKitty:"+this.selectedKitty);
+            this.kittyPrice = 0;
+        },
+        updated() {
+            this.defaultPrice();
         },
         computed: {
             ...mapGetters('kitties', ['selectedKitty']),
@@ -93,13 +98,16 @@
         },
         methods: {
             ...mapActions('kitties', ['fetchKittyById']),
-            // ...mapActions('loader', ['loaderToggle']),
+            defaultPrice(){
+                debugger;
+                this.kittyPrice = this.$options.filters.weitoether(this.selectedKitty.value, 4);
+            },
             isMyKitty(){
                 if (!this.userProfile.wallet || !this.selectedKitty.owner) return false;
                 return this.userProfile.wallet.address.toUpperCase() == this.selectedKitty.owner.address.toUpperCase()
             },
             isInAuction(){
-                return this.selectedKitty.auction.price;
+                return this.selectedKitty.auction && this.selectedKitty.auction.price;
             },
             onBuyKitty(){
               try {
@@ -118,8 +126,9 @@
             onPutOnSaleKitty(){
               try {
                 this.$store.dispatch(`loader/${LOADER.TOGGLE}`, true, { root: true });
-                contracts.invokeMethod('createSaleAuction', [this.selectedKitty.id, this.kittyPrice, this.kittyPrice, this.kittyPrice], this.userProfile.wallet).then(()=>{
-                    console.log(`createSaleAuction kittyId: ${this.selectedKitty.id} price: ${this.kittyPrice}`)
+                const price = this.$options.filters.ethertowei(this.kittyPrice);
+                contracts.invokeMethod('createSaleAuction', [this.selectedKitty.id, price, price, price], this.userProfile.wallet).then(()=>{
+                    console.log(`createSaleAuction kittyId: ${this.selectedKitty.id} price: ${price}`)
                 })
               } catch (error) {
                 //Notification error                

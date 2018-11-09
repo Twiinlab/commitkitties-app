@@ -2,6 +2,8 @@
 // const moment = require('moment')
 import moment from 'moment'
 
+import * as contracts from './contracts';
+
 const filters = {
 
   truncate: function(value, limit) {
@@ -45,8 +47,15 @@ const filters = {
     return keep ? fixed : +fixed;
   },
 
-  weitoether: function(value, accuracy) {
-    let result = value / Math.pow(10, 18);
+  weitoether: function(value = 0, accuracy) {
+    // let result = value / Math.pow(10, 18);
+    let result = contracts.WeiToEther(value);
+    return accuracy ? result.toFixed(accuracy) : result;
+  },
+
+  ethertowei: function(value = 0, accuracy) {
+    // let result = value / Math.pow(10, 18);
+    let result = contracts.EtherToWei(value);
     return accuracy ? result.toFixed(accuracy) : result;
   },
 

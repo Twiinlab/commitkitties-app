@@ -26,6 +26,14 @@ export const createAccount = function() {
     return web3.eth.accounts.create();
 }
 
+export const EtherToWei = function(etherValue = 0){
+    return parseFloat(web3.utils.toWei(etherValue.toString()));
+}
+
+export const WeiToEther = function(weiValue = 0){
+    return parseFloat(web3.utils.fromWei(weiValue.toString(), 'ether'))
+}
+
 export const getContract = async (contractName) => {
     const metaContract = await fb.db.collection('contracts').doc(contractName).get();
     if (!metaContract.exists) {
