@@ -14,13 +14,9 @@
 </template>
 
 <script>
-import { HalfCircleSpinner } from "epic-spinners";
 
 export default {
   name: "Spinner",
-  components: {
-    HalfCircleSpinner
-  },
   props: {
     condition: {
       type: Boolean,
