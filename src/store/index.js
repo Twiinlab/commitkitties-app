@@ -29,6 +29,7 @@ fb.auth.onAuthStateChanged(user => {
                     await axios.post(`http://localhost:8080/api/users`, { id: user.uid, data: userData });
                 } else {
                     contracts.watchUserEvents(userData.wallet.address);
+                    await store.dispatch('kitties/fetchMyKitties', userData.wallet.address);
                 }
             }
             else {
@@ -47,7 +48,7 @@ fb.auth.onAuthStateChanged(user => {
             }
             await store.commit('users/setUserProfile', doc.data())
             await store.dispatch('users/updateBalanceProfile');
-                    
+            
         })
 
     }

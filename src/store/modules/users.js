@@ -2,6 +2,9 @@ import axios from 'axios'
 import { web3Connection } from '../../plugins/contracts.js';
 import { METHODS } from 'http';
 const fb = require('../../firebaseConfig.js')
+import store from '../../store';
+
+
 
 export default {
     namespaced: true,
@@ -30,8 +33,7 @@ export default {
             commit('setCurrentUser', null)
             commit('setUserProfile', {})
             commit('setUserActivity', null)
-            commit('setPosts', null)
-            commit('setHiddenPosts', null)
+            store.dispatch('kitties/clearData')
         },
         fetchUserProfile({ commit, state }) {
             fb.usersCollection.doc(state.currentUser.uid).get().then(res => {
@@ -95,17 +97,13 @@ export default {
             state.userProfile = val
         },
         setUserActivity(state, val) {
-            state.userActivity = val.data
+            state.userActivity = val ? val.data : {};
         },
         setUserBalance(state, val) {
             state.userBalance = val
         },
         setRanking(state, val) {
-            if (val) {
-                state.ranking = val.data;
-            } else {
-                state.ranking = {}
-            }
+            state.ranking = val ? val.data : {};
         }
     }
 };
