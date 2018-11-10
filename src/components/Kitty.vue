@@ -94,15 +94,12 @@
         mounted() {
             this.kittyPrice = parseFloat(this.$options.filters.weitoether(this.selectedKitty.value, 4));
         },
-        destroyed(){
-            this.clearData();
-        },
         computed: {
             ...mapGetters('kitties', ['selectedKitty']),
             ...mapState('users', ['userProfile'])
         },
         methods: {
-            ...mapActions('kitties', ['fetchKittyById','clearData']),
+            ...mapActions('kitties', ['fetchKittyById','updateKittie']),
             getAuctionPrice(){
             if (!this.selectedKitty.auction || !this.selectedKitty.auction.price) {
                 return this.$options.filters.weitoether(this.selectedKitty.value, 4);
@@ -121,12 +118,14 @@
                 
                   this.$store.dispatch(`loader/${LOADER.TOGGLE}`, true, { root: true });
                   contracts.bidAuction(this.selectedKitty.id, this.selectedKitty.auction.price, this.userProfile.wallet).then(()=>{
-                      console.log(`bidAuction kittyId: ${this.selectedKitty.id} price: ${this.selectedKitty.auction.price}`)
+                    console.log(`bidAuction kittyId: ${this.selectedKitty.id} price: ${this.selectedKitty.auction.price}`)
+                    let selectedKitty = Object.assign({}, this.selectedKitty);
+                    selectedKitty.owner = { address: this.userProfile.wallet.address};
+                    this.updateKittie(selectedKitty);
                   })
                 } catch (error) {
                   //Notification error
                 } finally {
-                    this.$store.dispatch('kitties/fetchMyKitties', this.userProfile.wallet.address);
                     this.$store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
                 }
             },
@@ -136,11 +135,13 @@
                 const price = this.$options.filters.ethertowei(this.kittyPrice);
                 contracts.invokeMethod('createSaleAuction', [this.selectedKitty.id, price, price, price], this.userProfile.wallet).then(()=>{
                     console.log(`createSaleAuction kittyId: ${this.selectedKitty.id} price: ${price}`)
+                    let selectedKitty = Object.assign({}, this.selectedKitty);
+                    selectedKitty.auction = { price };
+                    this.updateKittie(selectedKitty);
                 })
               } catch (error) {
                 //Notification error                
               } finally {
-                    this.fetchKittyById(this.$route.params.id);
                     this.$store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
               }
             }

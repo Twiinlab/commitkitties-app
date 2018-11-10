@@ -39,7 +39,7 @@ export default {
         },
         fetchKittyById({ commit, state }, data) {
             fb.kittiesCollection.where("id","==",data).get().then(res => {
-                commit('setSelectedKitty', res.docs[0]);
+                commit('setSelectedKitty', res.docs[0].data());
             }).catch(err => {
                 console.log(err)
             })
@@ -66,7 +66,8 @@ export default {
             }
         },
         updateKittie({ commit, state }, data) {
-            console.log('updateKittie');
+            console.log(`updateKittie: ${JSON.stringify(data)}`);
+            commit('setSelectedKitty', data);
             // let name = data.name
             // let title = data.title
 
@@ -109,7 +110,7 @@ export default {
         },
         setSelectedKitty(state, val) {
             if (val) {
-                state.selectedKitty = val.data();
+                state.selectedKitty = val;
             } else {
                 state.selectedKitty = {}
             }
