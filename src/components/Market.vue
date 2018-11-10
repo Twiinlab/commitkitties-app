@@ -79,6 +79,9 @@
         created() {
             this.fetchSampleKitties(); 
             this.fetchOnSaleKitties();
+            if (this.userProfile && this.userProfile.wallet) {
+                this.fetchMyKitties(this.userProfile.wallet.address);
+            }
         },
         computed: {
             ...mapState('users', ['userProfile']),

@@ -76,7 +76,7 @@
             }
         },
         created() {
-            this.fetchMyKitties('Ix0Mo3CbhbegnTft36X0yCUWnhJ3');
+            
         },
         computed: {
             ...mapGetters('users', ['userProfile','userActivity']),

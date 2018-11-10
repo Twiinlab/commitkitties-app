@@ -126,7 +126,7 @@
                 } catch (error) {
                   //Notification error
                 } finally {
-                    this.fetchKittyById(this.$route.params.id);
+                    this.$store.dispatch('kitties/fetchMyKitties', this.userProfile.wallet.address);
                     this.$store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
                 }
             },
