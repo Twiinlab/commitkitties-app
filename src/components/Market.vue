@@ -27,7 +27,7 @@
                             </md-card>
                         </router-link>
                     </div>
-                    <label class="md-title">ON SALE</label>
+                    <label class="md-title">FOR SALE</label>
                     <label class="md-body-2">Purchase with Kitties with newly discovered traits.</label>
                     <div class="scrolling-wrapper">
                         <router-link :to="{ name: 'Kitty', params: { id: kitty.id}}" v-if="kitty.image_url" v-for="kitty in onSaleKitties"  v-bind:key="kitty.id">
@@ -37,7 +37,7 @@
                                 </md-card-media>
                                 <md-card-header>
                                     <div class="md-subhead">{{kitty.name|truncate(30)}}</div>
-                                    <div class="md-subhead">Ξ {{ kitty.value|weitoether(4) }}</div>
+                                    <div ><b>For Sale </b> Ξ {{ kitty.auction.price | weitoether(4) }}</div>
                                 </md-card-header>                                
                             </md-card>
                         </router-link>
