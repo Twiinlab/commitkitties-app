@@ -132,7 +132,7 @@
             onPutOnSaleKitty(customPrice){
               try {
                 this.$store.dispatch(`loader/${LOADER.TOGGLE}`, true, { root: true });
-                const price = this.$options.filters.ethertowei(this.kittyPrice);
+                const price = (this.$options.filters.ethertowei(this.kittyPrice)).toString();
                 contracts.invokeMethod('createSaleAuction', [this.selectedKitty.id, price, price, price], this.userProfile.wallet).then(()=>{
                     console.log(`createSaleAuction kittyId: ${this.selectedKitty.id} price: ${price}`)
                     let selectedKitty = Object.assign({}, this.selectedKitty);

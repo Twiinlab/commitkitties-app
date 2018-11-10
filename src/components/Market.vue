@@ -4,7 +4,8 @@
             <div>
                 <h1>MARKET</h1>
                 <div class="profile">
-                    <label>MY KITTIES</label>
+                    <label class="md-title" >MY KITTIES</label>
+                    <label class="md-body-2">List of kitties that you own, ready to be trade.</label>
                     <md-card v-if="myKitties.length == 0">
                         <md-card-media>
                             <img src="@/assets/images/noKitty.png" alt="logo">
@@ -26,7 +27,8 @@
                             </md-card>
                         </router-link>
                     </div>
-                    <label>ON SALE</label>
+                    <label class="md-title">ON SALE</label>
+                    <label class="md-body-2">Purchase with Kitties with newly discovered traits.</label>
                     <div class="scrolling-wrapper">
                         <router-link :to="{ name: 'Kitty', params: { id: kitty.id}}" v-if="kitty.image_url" v-for="kitty in onSaleKitties"  v-bind:key="kitty.id">
                             <md-card >
@@ -40,7 +42,8 @@
                             </md-card>
                         </router-link>
                     </div>
-                    <label>RECENTLY LISTED</label>
+                    <label class="md-title">RECENTLY LISTED</label>
+                    <label class="md-body-2">List of last kitties updated.</label>
                     <div class="scrolling-wrapper">
                         <router-link :to="{ name: 'Kitty', params: { id: kitty.id}}" v-if="kitty.image_url" v-for="kitty in sampleKitties" v-bind:key="kitty.id">
                             <md-card >

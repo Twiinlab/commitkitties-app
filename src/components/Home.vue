@@ -16,7 +16,8 @@
             <div>
                 <h1>CATALOGUE</h1>
                 <div class="profile">
-                    <label>ON SALE</label>
+                    <label class="md-title">ON SALE</label>
+                    <label class="md-body-2">Purchase with Kitties with newly discovered traits.</label>
                     <div class="scrolling-wrapper">
                         <router-link :to="{ name: 'Kitty', params: { id: kitty.id}}" v-if="kitty.image_url" v-for="kitty in onSaleKitties"  v-bind:key="kitty.id">
                             <md-card >
@@ -30,7 +31,8 @@
                             </md-card>
                         </router-link>
                     </div>
-                    <label>RECENTLY LISTED</label>
+                    <label class="md-title">RECENTLY LISTED</label>
+                    <label class="md-body-2">List of last kitties updated.</label>
                     <div class="scrolling-wrapper">
                         <router-link :to="{ name: 'Kitty', params: { id: kitty.id}}" v-if="kitty.image_url" v-for="kitty in sampleKitties" v-bind:key="kitty.id">
                             <md-card >
