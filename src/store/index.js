@@ -2,16 +2,13 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import users from './modules/users'
+import kpis from './modules/kpis'
 import kitties from './modules/kitties'
 import loader from './modules/loader'
 
 import * as contracts from '../plugins/contracts'
 
-
-
 const fb = require('../firebaseConfig.js')
-
-
 
 Vue.use(Vuex);
 
@@ -57,6 +54,7 @@ fb.auth.onAuthStateChanged(user => {
 const store = new Vuex.Store({
   modules: {
     users,
+    kpis,
     kitties,
     loader
   }

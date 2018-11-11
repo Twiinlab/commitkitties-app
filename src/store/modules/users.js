@@ -81,9 +81,9 @@ export default {
             })
         },
         fetchRanking({ commit, state }) {
-            //fb.usersCollection.get()
-            axios.get('http://localhost:8080/api/kpis/ranking').then(res => {
-                commit('setRanking', res)
+            //axios.get('http://localhost:8080/api/kpis/ranking').then(res => {
+            fb.rankingCollection.get().then(res => {
+                commit('setRanking', res.docs)
             }).catch(err => {
                 console.log(err)
             })
@@ -103,7 +103,7 @@ export default {
             state.userBalance = val
         },
         setRanking(state, val) {
-            state.ranking = val ? val.data : {};
+            state.ranking = val ? val.map(d => d.data()) : [];
         }
     }
 };

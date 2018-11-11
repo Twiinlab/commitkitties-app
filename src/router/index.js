@@ -8,6 +8,7 @@ import Ranking from '@/components/Ranking'
 import Dashboard from '@/components/Dashboard'
 import Kitty from '@/components/Kitty'
 import Profile from '@/components/Profile'
+import Kpis from '@/components/Kpis'
 
 Vue.use(Router)
 
@@ -49,6 +50,11 @@ const router = new Router({
             meta: {
                 requiresAuth: true
             }
+		},
+        {
+			path: '/kpis',
+			name: 'Kpis',
+			component: Kpis
 		}
 	]
 })

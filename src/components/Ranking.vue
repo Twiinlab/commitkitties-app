@@ -26,23 +26,6 @@
                             <md-table-cell md-label="Balance" md-sort-by="balance">{{ item.balance }}</md-table-cell>
                         </md-table-row>
                     </md-table>
-                    <br><br>
-                    <label><h2>TOP USERS</h2></label>
-                    <md-list class="md-triple-line">
-                        <md-list-item v-for="userRank in ranking" v-bind:key="userRank.id" >
-                            <md-avatar>
-                                <img v-if="userRank.user.photoURL" v-bind:src="userRank.user.photoURL" alt="People">
-                            </md-avatar>
-                            <div class="md-list-item-text">
-                                <span>{{userRank.user.displayName}}</span>
-                                <span>{{userRank.user.email}}</span>
-                                <p><b>Balance:</b> Ξ  {{userRank.balance}}</p>
-                            </div>
-                            <md-button class="md-icon-button md-list-action">
-                                <md-icon class="md-primary">star</md-icon>
-                            </md-button>
-                        </md-list-item>
-                    </md-list>
                 </div>
                 <transition name="fade">
                     <div v-if="errorMsg !== ''" class="error-msg">
