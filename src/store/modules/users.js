@@ -3,8 +3,7 @@ import { web3Connection } from '../../plugins/contracts.js';
 import { METHODS } from 'http';
 const fb = require('../../firebaseConfig.js')
 import store from '../../store';
-
-
+import config from '@/config';
 
 export default {
     namespaced: true,
@@ -43,7 +42,8 @@ export default {
             })
         },
         fetchUserActivity({ commit, state }) {
-            axios.get('http://localhost:8080/api/kpis/userid/'+state.currentUser.uid).then(res => {
+            // axios.get('http://localhost:8080/api/kpis/userid/' + state.currentUser.uid).then(res => {
+            axios.get(`${config.api.endpoint+config.api.base}/kpis/userid/` + state.currentUser.uid).then(res => {
                 commit('setUserActivity', res)       
             }).catch(err => {
                 console.log(err)
@@ -81,7 +81,7 @@ export default {
             })
         },
         fetchRanking({ commit, state }) {
-            //axios.get('http://localhost:8080/api/kpis/ranking').then(res => {
+            //axios.get(`${config.api.endpoint+config.api.base}/kpis/ranking`).then(res => {
             fb.rankingCollection.get().then(res => {
                 commit('setRanking', res.docs)
             }).catch(err => {

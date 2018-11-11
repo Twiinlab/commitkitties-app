@@ -39,13 +39,13 @@ export default {
         },
         fetchKittyById({ commit, state }, data) {
             fb.kittiesCollection.where("id","==",data).get().then(res => {
-                commit('setSelectedKitty', res.docs[0]);
+                commit('setSelectedKitty', res.docs[0].data());
             }).catch(err => {
                 console.log(err)
             })
         },
         fetchOnSaleKitties({ commit, state }) {
-            fb.kittiesCollection.where("auction.price",">","0").get().then(res => {
+            fb.kittiesCollection.where("auction.price",">",0).get().then(res => {
                 commit('setOnSaleKitties', res.docs)
             }).catch(err => {
                 console.log(err)
@@ -66,30 +66,8 @@ export default {
             }
         },
         updateKittie({ commit, state }, data) {
-            console.log('updateKittie');
-            // let name = data.name
-            // let title = data.title
-
-            // fb.usersCollection.doc(state.currentUser.uid).update({ name, title }).then(user => {
-            //     // update all posts by user to reflect new name
-            //     fb.postsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
-            //         docs.forEach(doc => {
-            //             fb.postsCollection.doc(doc.id).update({
-            //                 userName: name
-            //             })
-            //         })
-            //     })
-            //     // update all comments by user to reflect new name
-            //     fb.commentsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
-            //         docs.forEach(doc => {
-            //             fb.commentsCollection.doc(doc.id).update({
-            //                 userName: name
-            //             })
-            //         })
-            //     })
-            // }).catch(err => {
-            //     console.log(err)
-            // })
+            console.log(`updateKittie: ${JSON.stringify(data)}`);
+            commit('setSelectedKitty', data);
         }
     },
     mutations: {
@@ -109,7 +87,7 @@ export default {
         },
         setSelectedKitty(state, val) {
             if (val) {
-                state.selectedKitty = val.data();
+                state.selectedKitty = val;
             } else {
                 state.selectedKitty = {}
             }
