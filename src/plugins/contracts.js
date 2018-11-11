@@ -5,6 +5,8 @@ import Tx from 'ethereumjs-tx';
 // import config  from '@/config';
 const fb = require('../firebaseConfig.js')
 const store = require('../store/index')
+import config from '@/config';
+
 
 let web3 = undefined;
 
@@ -16,7 +18,7 @@ if (typeof web3 !== 'undefined') {
     // "http://localhost:8545"
     // web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/2nluVzjZVelxFadFKD0f"));
     // web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-    web3 = new Web3(new Web3.providers.WebsocketProvider(`ws://localhost:8545`));
+    web3 = new Web3(new Web3.providers.WebsocketProvider(`${config.network.ws}`));
 }
 
 export const web3Connection = web3;

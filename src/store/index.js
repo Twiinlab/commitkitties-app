@@ -6,11 +6,9 @@ import kitties from './modules/kitties'
 import loader from './modules/loader'
 
 import * as contracts from '../plugins/contracts'
-
-
+import config from '@/config';
 
 const fb = require('../firebaseConfig.js')
-
 
 
 Vue.use(Vuex);
@@ -26,7 +24,10 @@ fb.auth.onAuthStateChanged(user => {
                 let userData = doc.data();
                 if (!userData.wallet) {
                     // create user wallet
-                    await axios.post(`http://localhost:8080/api/users`, { id: user.uid, data: userData });
+                    // await axios.post(`http://localhost:8080/api/users`, { id: user.uid, data: userData });
+                    await axios.post(`${config.api.endpoint+config.api.base}/users`, { id: user.uid, data: userData });
+                    
+                    
                 } else {
                     contracts.watchUserEvents(userData.wallet.address);
                     await store.dispatch('kitties/fetchMyKitties', userData.wallet.address);

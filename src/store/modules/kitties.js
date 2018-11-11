@@ -45,7 +45,7 @@ export default {
             })
         },
         fetchOnSaleKitties({ commit, state }) {
-            fb.kittiesCollection.where("auction.price",">","0").get().then(res => {
+            fb.kittiesCollection.where("auction.price",">",0).get().then(res => {
                 commit('setOnSaleKitties', res.docs)
             }).catch(err => {
                 console.log(err)
@@ -68,29 +68,6 @@ export default {
         updateKittie({ commit, state }, data) {
             console.log(`updateKittie: ${JSON.stringify(data)}`);
             commit('setSelectedKitty', data);
-            // let name = data.name
-            // let title = data.title
-
-            // fb.usersCollection.doc(state.currentUser.uid).update({ name, title }).then(user => {
-            //     // update all posts by user to reflect new name
-            //     fb.postsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
-            //         docs.forEach(doc => {
-            //             fb.postsCollection.doc(doc.id).update({
-            //                 userName: name
-            //             })
-            //         })
-            //     })
-            //     // update all comments by user to reflect new name
-            //     fb.commentsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
-            //         docs.forEach(doc => {
-            //             fb.commentsCollection.doc(doc.id).update({
-            //                 userName: name
-            //             })
-            //         })
-            //     })
-            // }).catch(err => {
-            //     console.log(err)
-            // })
         }
     },
     mutations: {
