@@ -47,6 +47,11 @@
                         </router-link>
                     </div>
                 </div>
+                <router-link :to="{ name: 'Kpis'}">
+                  <md-avatar class="md-avatar-icon md-large md-primary kpis-icon">
+                      <md-icon>poll</md-icon>
+                  </md-avatar>
+                </router-link>
                 <transition name="fade">
                     <div v-if="errorMsg !== ''" class="error-msg">
                         <p>{{ errorMsg }}</p>
@@ -87,6 +92,14 @@ export default {
   background-color: white;
   text-align: center;
   margin: 0px 6rem;
+}
+
+.kpis-icon{
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 1;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .Explainer-what {
