@@ -6,7 +6,7 @@ const defaultConfig = {
 }
 
 const custom = {
-  development: {
+  dev: {
     firebase: {
       apiKey: "AIzaSyAneLpLkRE7lLi2tFasaQHXs18FuLBz1IY",
       authDomain: "commitkitties-geth.firebaseapp.com",
@@ -29,8 +29,15 @@ const custom = {
       mnemonic: "cargo little forum bring connect ready old matter accident ability never thumb"
     } 
   },
-  pre: {
-    
+  development: {
+    firebase: {
+      apiKey: "AIzaSyAneLpLkRE7lLi2tFasaQHXs18FuLBz1IY",
+      authDomain: "commitkitties-geth.firebaseapp.com",
+      databaseURL: "https://commitkitties-geth.firebaseio.com",
+      projectId: "commitkitties-geth",
+      storageBucket: "commitkitties-geth.appspot.com",
+      messagingSenderId: "908015484677"
+    },
     api: {
       endpoint: 'http://localhost:8080',
       base: '/api'
