@@ -2,18 +2,19 @@
 const env = process.env.NODE_ENV;
 
 const defaultConfig = {
-  firebase: {
-      apiKey: "AIzaSyAQxPhK8Hag2-C0HUWS0HSkfSmmsrDMoW8",
-      authDomain: "commitkitties.firebaseapp.com",
-      databaseURL: "https://commitkitties.firebaseio.com",
-      projectId: "commitkitties",
-      storageBucket: "commitkitties.appspot.com",
-      messagingSenderId: "1020750963599"
-    }
+
 }
 
 const custom = {
-  dev: {
+  development: {
+    firebase: {
+      apiKey: "AIzaSyAneLpLkRE7lLi2tFasaQHXs18FuLBz1IY",
+      authDomain: "commitkitties-geth.firebaseapp.com",
+      databaseURL: "https://commitkitties-geth.firebaseio.com",
+      projectId: "commitkitties-geth",
+      storageBucket: "commitkitties-geth.appspot.com",
+      messagingSenderId: "908015484677"
+    },
     api: {
       endpoint: 'http://localhost:8080',
       base: '/api'
@@ -28,7 +29,8 @@ const custom = {
       mnemonic: "cargo little forum bring connect ready old matter accident ability never thumb"
     } 
   },
-  development: {
+  pre: {
+    
     api: {
       endpoint: 'http://localhost:8080',
       base: '/api'
@@ -44,6 +46,14 @@ const custom = {
     } 
   },
   prod: {
+    firebase: {
+      apiKey: "AIzaSyAQxPhK8Hag2-C0HUWS0HSkfSmmsrDMoW8",
+      authDomain: "commitkitties.firebaseapp.com",
+      databaseURL: "https://commitkitties.firebaseio.com",
+      projectId: "commitkitties",
+      storageBucket: "commitkitties.appspot.com",
+      messagingSenderId: "1020750963599"
+    },
     api: {
       endpoint: 'https://commitkitties-api.appspot.com',
       base: '/api'
