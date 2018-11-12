@@ -23,16 +23,22 @@ fb.auth.onAuthStateChanged(user => {
         fb.usersCollection.doc(user.uid).onSnapshot( async doc => {
             if(doc.exists){
                 let userData = doc.data();
-                if (!userData.wallet) {
+                if (userData.wallet) {
                     // create user wallet
                     // await axios.post(`http://localhost:8080/api/users`, { id: user.uid, data: userData });
-                    await axios.post(`${config.api.endpoint+config.api.base}/users`, { id: user.uid, data: userData });
                     
-                    
-                } else {
+                    // axios.post(`${config.api.endpoint+config.api.base}/users`, { id: user.uid, data: userData }).then( userResult => {
+                    //     debugger;
+                    //     store.commit('users/setUserProfile', userResult)
+                    //     store.dispatch('users/updateBalanceProfile');
+                    //     console.log('userData: ', userResult);
+                    // })
                     contracts.watchUserEvents(userData.wallet.address);
                     await store.dispatch('kitties/fetchMyKitties', userData.wallet.address);
                 }
+                debugger;
+                await store.commit('users/setUserProfile', doc.data())
+                await store.dispatch('users/updateBalanceProfile');
             }
             else {
                 // create user obj
@@ -41,15 +47,20 @@ fb.auth.onAuthStateChanged(user => {
                     displayName: user.displayName,
                     email: user.email,
                     photoURL: user.photoURL
-                }).then(() => {
-                    this.$store.dispatch('users/fetchUserProfile')
+                }).then((result) => {
+                    debugger;
+                    axios.post(`${config.api.endpoint+config.api.base}/users`, { id: user.uid }).then( userResult => {
+                        debugger;
+                        store.commit('users/setUserProfile', userResult.data)
+                        store.dispatch('users/updateBalanceProfile');
+                        console.log('userData: ', userResult.data);
+                        // store.dispatch('users/fetchUserProfile')
+                    })
                 }).catch(err => {
                     console.log(err)
                     this.errorMsg = err.message
                 })
             }
-            await store.commit('users/setUserProfile', doc.data())
-            await store.dispatch('users/updateBalanceProfile');
             
         })
 

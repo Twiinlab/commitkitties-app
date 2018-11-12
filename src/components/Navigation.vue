@@ -3,7 +3,7 @@
         <section>
             <div class="col1">
                 <router-link to="/home"><h3>CommitKitties</h3></router-link>
-                <ul v-if="userProfile.userId" class="inline">
+                <ul v-if="userProfile && userProfile.userId" class="inline">
                     <li><router-link to="/home">Home</router-link></li>
                     <li><router-link to="/ranking">Ranking</router-link></li>
                     <li><router-link to="/market">Market</router-link></li>

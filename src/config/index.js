@@ -29,7 +29,7 @@ const custom = {
       mnemonic: "cargo little forum bring connect ready old matter accident ability never thumb"
     } 
   },
-  development: {
+  production: {
     firebase: {
       apiKey: "AIzaSyAneLpLkRE7lLi2tFasaQHXs18FuLBz1IY",
       authDomain: "commitkitties-geth.firebaseapp.com",
@@ -39,7 +39,7 @@ const custom = {
       messagingSenderId: "908015484677"
     },
     api: {
-      endpoint: 'http://localhost:8080',
+      endpoint: 'https://commitkitties-api.appspot.com',
       base: '/api'
     },
     network:{
