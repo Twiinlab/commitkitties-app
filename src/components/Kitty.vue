@@ -1,9 +1,10 @@
 <template>
     <div id="dashboard" class="explainer-bg">
-        <app-loader />
+        <!-- <app-loader /> -->
+        <spinner class="spinner" :condition="!showLoading"></spinner>
         <section>
             <div class="col1">
-                <h1>Kitty On Sale</h1>
+                <h1>Kitty On Sale {{showLoading}}</h1>
                 <div class="profile">
                     <img v-if="selectedKitty.image_url" v-bind:src="selectedKitty.image_url" alt="People">
                 </div>
@@ -61,6 +62,12 @@
     display: inline-block;
     vertical-align: top;
   }
+  .spinner{
+    z-index: 10;
+    position: absolute;
+    top: 20%;
+    left: 40%;
+  }
 </style>
 
 <script>
@@ -83,7 +90,8 @@
             return {
                 errorMsg: '',
                 kittyPrice: 0,
-                newPrice: null
+                newPrice: null,
+                showLoading: false
             }
         },
         created() {
@@ -115,34 +123,40 @@
             },
             onBuyKitty(){
               try {
-                
-                  this.$store.dispatch(`loader/${LOADER.TOGGLE}`, true, { root: true });
+                  this.showLoading = true;
+                //   this.$store.dispatch(`loader/${LOADER.TOGGLE}`, true, { root: true });
                   contracts.bidAuction(this.selectedKitty.id, this.selectedKitty.auction.price, this.userProfile.wallet).then(()=>{
                     console.log(`bidAuction kittyId: ${this.selectedKitty.id} price: ${this.selectedKitty.auction.price}`)
                     let selectedKitty = Object.assign({}, this.selectedKitty);
                     selectedKitty.owner = { address: this.userProfile.wallet.address};
                     this.updateKittie(selectedKitty);
+                    this.showLoading = false;
                   })
                 } catch (error) {
+                    this.showLoading = false;
                   //Notification error
                 } finally {
-                    this.$store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
+                    // this.$store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
+                    // this.showLoading = false;
                 }
             },
             onPutOnSaleKitty(customPrice){
               try {
-                this.$store.dispatch(`loader/${LOADER.TOGGLE}`, true, { root: true });
+                this.showLoading = true;
+                // this.$store.dispatch(`loader/${LOADER.TOGGLE}`, true, { root: true });
                 const price = (this.$options.filters.ethertowei(this.kittyPrice)).toString();
                 contracts.invokeMethod('createSaleAuction', [this.selectedKitty.id, price, price, price], this.userProfile.wallet).then(()=>{
                     console.log(`createSaleAuction kittyId: ${this.selectedKitty.id} price: ${price}`)
                     let selectedKitty = Object.assign({}, this.selectedKitty);
                     selectedKitty.auction = { price };
                     this.updateKittie(selectedKitty);
+                    this.showLoading = false;
                 })
               } catch (error) {
-                //Notification error                
+                    this.showLoading = false;              
               } finally {
-                    this.$store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
+                    // this.$store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
+                    // this.showLoading = false;
               }
             }
         }

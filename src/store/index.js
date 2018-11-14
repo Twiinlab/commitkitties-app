@@ -36,7 +36,6 @@ fb.auth.onAuthStateChanged(user => {
                     contracts.watchUserEvents(userData.wallet.address);
                     await store.dispatch('kitties/fetchMyKitties', userData.wallet.address);
                 }
-                debugger;
                 await store.commit('users/setUserProfile', doc.data())
                 await store.dispatch('users/updateBalanceProfile');
             }
@@ -48,9 +47,7 @@ fb.auth.onAuthStateChanged(user => {
                     email: user.email,
                     photoURL: user.photoURL
                 }).then((result) => {
-                    debugger;
                     axios.post(`${config.api.endpoint+config.api.base}/users`, { id: user.uid }).then( userResult => {
-                        debugger;
                         store.commit('users/setUserProfile', userResult.data)
                         store.dispatch('users/updateBalanceProfile');
                         console.log('userData: ', userResult.data);
