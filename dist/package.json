@@ -1,0 +1,17 @@
+{
+  "name": "commitkitties-app",
+  "version": "0.0.1",
+  "private": true,
+  "license": "Apache-2.0",
+  "author": "Twinlab",
+  "engines": {
+    "node": ">=8"
+  },
+  "scripts": {
+    "deploy": "gcloud app deploy",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
