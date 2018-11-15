@@ -42,7 +42,11 @@
                 </div>
             </div>
         </section>
+        <md-snackbar v-bind:style="{ 'background-color': notificationColor}" :md-position="'center'" :md-active.sync="showSnackbar" md-persistent>
+            <span>{{notificationMsg}}</span>
+        </md-snackbar>
     </div>
+    
 </template>
 
 <style lang="scss" scoped>
@@ -64,9 +68,11 @@
   }
   .spinner{
     z-index: 10;
-    position: absolute;
+    position: fixed;
     top: 20%;
-    left: 40%;
+    /* left: 25%; */
+    /* float: left; */
+    width: 100%;
   }
 </style>
 
@@ -91,7 +97,10 @@
                 errorMsg: '',
                 kittyPrice: 0,
                 newPrice: null,
-                showLoading: false
+                showLoading: false,
+                showSnackbar: false,
+                notificationColor: 'lightgreen',
+                notificationMsg: ''
             }
         },
         created() {
@@ -121,42 +130,53 @@
             isInAuction(){
                 return this.selectedKitty.auction && this.selectedKitty.auction.price;
             },
+            onShowLoading(showLoading){
+              this.showLoading = showLoading;
+            },
+            onShowNotification(isOk){
+              this.notificationColor = isOk ? 'lightgreen' : 'lightcoral';
+              this.showSnackbar = true;
+              this.notificationMsg = isOk ? 'Cool! Everything was fine!' : 'Ups! Something happened!';
+            },
             onBuyKitty(){
               try {
-                  this.showLoading = true;
-                //   this.$store.dispatch(`loader/${LOADER.TOGGLE}`, true, { root: true });
+                  this.onShowLoading(true);
                   contracts.bidAuction(this.selectedKitty.id, this.selectedKitty.auction.price, this.userProfile.wallet).then(()=>{
                     console.log(`bidAuction kittyId: ${this.selectedKitty.id} price: ${this.selectedKitty.auction.price}`)
                     let selectedKitty = Object.assign({}, this.selectedKitty);
                     selectedKitty.owner = { address: this.userProfile.wallet.address};
                     this.updateKittie(selectedKitty);
-                    this.showLoading = false;
+                    this.onShowLoading(false);
+                    this.onShowNotification(true);
+                  })
+                  .catch(error => {
+                    this.onShowLoading(false);
+                    this.onShowNotification(false);
                   })
                 } catch (error) {
-                    this.showLoading = false;
-                  //Notification error
-                } finally {
-                    // this.$store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
-                    // this.showLoading = false;
+                  this.onShowLoading(false);
+                  this.onShowNotification(false);
                 }
             },
             onPutOnSaleKitty(customPrice){
               try {
-                this.showLoading = true;
-                // this.$store.dispatch(`loader/${LOADER.TOGGLE}`, true, { root: true });
+                this.onShowLoading(true);
                 const price = (this.$options.filters.ethertowei(this.kittyPrice)).toString();
                 contracts.invokeMethod('createSaleAuction', [this.selectedKitty.id, price, price, price], this.userProfile.wallet).then(()=>{
-                    console.log(`createSaleAuction kittyId: ${this.selectedKitty.id} price: ${price}`)
-                    let selectedKitty = Object.assign({}, this.selectedKitty);
-                    selectedKitty.auction = { price };
-                    this.updateKittie(selectedKitty);
-                    this.showLoading = false;
+                  console.log(`createSaleAuction kittyId: ${this.selectedKitty.id} price: ${price}`)
+                  let selectedKitty = Object.assign({}, this.selectedKitty);
+                  selectedKitty.auction = { price };
+                  this.updateKittie(selectedKitty);
+                  this.onShowLoading(false);
+                  this.onShowNotification(true);
                 })
+                .catch(error => {
+                    this.onShowLoading(false);
+                    this.onShowNotification(false);
+                  })
               } catch (error) {
-                    this.showLoading = false;              
-              } finally {
-                    // this.$store.dispatch(`loader/${LOADER.TOGGLE}`, false, { root: true });
-                    // this.showLoading = false;
+                this.onShowLoading(false);     
+                this.onShowNotification(false);
               }
             }
         }

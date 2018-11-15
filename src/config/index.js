@@ -29,7 +29,7 @@ const custom = {
       mnemonic: "cargo little forum bring connect ready old matter accident ability never thumb"
     } 
   },
-  pre: {
+  development: {
     firebase: {
       apiKey: "AIzaSyAneLpLkRE7lLi2tFasaQHXs18FuLBz1IY",
       authDomain: "commitkitties-geth.firebaseapp.com",
