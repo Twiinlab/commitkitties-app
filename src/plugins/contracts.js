@@ -103,22 +103,21 @@ export const invokeMethod = async (methodName, argumens, wallet) => {
 export const bidAuction = async (tokenId, price, wallet) => {
 
   const { contract, address } = await getContract('SaleClockAuction');
-  var gasPrice = await web3.eth.getGasPrice(); //1; //2;//or get with web3.eth.gasPrice
+  var gasPrice = await web3.eth.getGasPrice();
   var gasLimit = 3000000;
 
   const functionAbi = contract.methods.bid(tokenId).encodeABI()
 
-  var nonce = await web3.eth.getTransactionCount(wallet.address); //211;
+  var nonce = await web3.eth.getTransactionCount(wallet.address);
 
   var rawTransaction = {
       "from": wallet.address,
       "nonce": web3.utils.toHex(nonce),
-      "gasPrice": web3.utils.toHex(gasPrice), // '0x' + estimatedGas,
+      "gasPrice": web3.utils.toHex(gasPrice),
       "gasLimit": web3.utils.toHex(gasLimit),
-      "value": web3.utils.toHex(price),//web3.utils.toHex(web3.utils.fromWei(price, 'ether')),
+      "value": web3.utils.toHex(price),
       "to": address,
       "data": functionAbi,
-      // "chainId": 4 //rinkeby //remember to change this
     };
 
   var tx = new Tx(rawTransaction);
